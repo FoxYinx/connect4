@@ -20,8 +20,8 @@ public class ASCIIRenderer extends DisplayController {
 
     @Override
     public void render(GameState gameState) {
+        System.out.println(" _ _ _ _ _ _ _ ");
         for (int y = GameState.GRID_HEIGHT - 1; y >= 0; y--) {
-            System.out.println(" _ _ _ _ _ _ _ ");
             for (int x = 0; x < GameState.GRID_WIDTH; x++) {
                 System.out.print("|" + gameState.get(new GamePosition(x, y)));
             }
