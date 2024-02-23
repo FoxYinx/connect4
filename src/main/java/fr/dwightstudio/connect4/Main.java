@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         GameController gameController;
-        DisplayController displayController;
+        DisplayController displayController = null;
         String choice;
 
         System.out.println("ASCII or GPU-Intensive?");
@@ -22,17 +22,13 @@ public class Main {
             displayController = new ASCIIRenderer();
         } else if (choice.equals("2")) {
             displayController = new Java2DRenderer();
+        } else if (choice.equalsIgnoreCase("learn")) {
+             crippy();
         } else {
             throw new RuntimeException("Make a valid choice dummy (1 or 2)");
         }
         gameController = new GameController(displayController);
-
-        System.out.println("Howdy buddy, what ya wanna do? (learning is deprecated)");
-        System.out.println("Play? (y/n)");
-        choice = scanner.nextLine().strip();
-        if (choice.equalsIgnoreCase("y")) gameController.play();
-        if (choice.equalsIgnoreCase("learn")) crippy();
-        throw new RuntimeException("You HAVE to play!");
+        gameController.play();
     }
 
     private static void crippy() {
@@ -44,5 +40,6 @@ public class Main {
         System.out.println("NO, DO NOT DO THAT, DON'T PUSH THAT BUTTON");
         System.out.println("Deleting in progress...");
         System.out.println("譁 \t� \t蟄 \t怜 \t喧 \t縺 \t�");
+        throw new RuntimeException();
     }
 }
