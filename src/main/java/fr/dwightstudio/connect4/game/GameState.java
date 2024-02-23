@@ -125,7 +125,7 @@ public class GameState {
     }
 
     public boolean isDraw() {
-        return ~(crossGrid | circleGrid) == 0L;
+        return nbMoves == FLAT_LENGTH;
     }
 
     public char getWinner() {

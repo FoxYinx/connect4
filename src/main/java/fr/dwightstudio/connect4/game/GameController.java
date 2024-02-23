@@ -52,8 +52,8 @@ public class GameController {
     public static int negamax(GameState state, int alpha, int beta, Runnable nbUpdater) {
         nbUpdater.run();
 
-        Integer rtn = TRANSPOSITION_TABLE.get(state);
-        if (rtn != null) return rtn;
+        //Integer rtn = TRANSPOSITION_TABLE.get(state);
+        //if (rtn != null) return rtn;
 
         // check for draw game
         if (state.isDraw()) return 0;
@@ -61,7 +61,7 @@ public class GameController {
         // check if current player can win next move
         for (int x = 0; x < GameState.GRID_WIDTH; x++) {
             if (state.isPlayable(x) && (state.play(x).getWinner() != ' ')) {
-                return (GameState.GRID_WIDTH * GameState.GRID_HEIGHT + 1 - state.getNbMoves()) / 2;
+                return (GameState.FLAT_LENGTH + 1 - state.getNbMoves()) / 2;
             }
         }
 
@@ -95,16 +95,21 @@ public class GameController {
             }
         }
 
-        TRANSPOSITION_TABLE.put(state, alpha);
+        //TRANSPOSITION_TABLE.put(state, alpha);
 
         return alpha;
     }
 
     public void play() {
-        while (state.getWinner() == ' ') {
+        while (true) {
             state = state.play(displayController.play(state));
 
             displayController.render(state);
+
+            if (state.getWinner() == 'X') {
+                displayController.win(true);
+                return;
+            }
 
             SearchThread[] searchThreads = new SearchThread[GameState.GRID_WIDTH];
 
@@ -114,11 +119,6 @@ public class GameController {
                     searchThreads[i] = new SearchThread(state2);
                     searchThreads[i].start();
                 }
-            }
-
-            if (state.getWinner() == 'X') {
-                displayController.win(true);
-                return;
             }
 
             final int WAITING_MILLIS = 100;
@@ -133,7 +133,7 @@ public class GameController {
                 lastTotal = total;
                 total = 0;
 
-                System.out.print("\rSearching... Threads: ");
+                System.out.print("\rSearching...  Threads: ");
                 for (SearchThread searchThread : searchThreads) {
                     if (searchThread == null) continue;
                     int nb = searchThread.getNb() / 1000;
@@ -165,7 +165,7 @@ public class GameController {
             for (int i = 0; i < searchThreads.length; i++) {
                 if (searchThreads[i] == null) continue;
                 int score = searchThreads[i].getResult();
-                if (score > bestScore) {
+                if (score >= bestScore) {
                     bestScore = score;
                     best = i;
                 }
