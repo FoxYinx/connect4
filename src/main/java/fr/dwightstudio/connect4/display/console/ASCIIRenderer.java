@@ -27,7 +27,7 @@ public class ASCIIRenderer extends DisplayController {
             }
             System.out.println("|");
         }
-        System.out.println(" _ _ _ _ _ _ _ ");
+        System.out.println(" 1 2 3 4 5 6 7 ");
     }
 
     @Override
@@ -50,8 +50,8 @@ public class ASCIIRenderer extends DisplayController {
 
     @Override
     public void win(boolean human) {
+        System.out.println();
         if (human) {
-            System.out.println();
             System.out.println("CONGLATURATION!!!");
             System.out.println("YOU HAVE COMPLETED");
             System.out.println("A GREAT GAME.");
@@ -64,6 +64,11 @@ public class ASCIIRenderer extends DisplayController {
         } else {
             System.out.println("HUMANITY IS DOOMED");
         }
+    }
+
+    @Override
+    public void updateConfidence(int confidence) {
+        System.out.println("Confidence: " + confidence);
     }
 
     @Override

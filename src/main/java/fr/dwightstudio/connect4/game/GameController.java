@@ -37,7 +37,7 @@ public class GameController {
 
         // check if current player can win next move
         for (int x = 0; x < GameState.GRID_WIDTH; x++) {
-            if (state.isPlayable(x) && (state.play(x).getWinner() != ' ')) {
+            if (state.isPlayable(x) && (state.play(x).getWinner() == 'O')) {
                 return (GameState.GRID_WIDTH * GameState.GRID_HEIGHT + 1 - state.getNbMoves()) / 2;
             }
         }
@@ -93,8 +93,8 @@ public class GameController {
                 }
             }
 
-            if (state.getWinner() != ' ') {
-                displayController.win(state.getWinner() == 'X');
+            if (state.getWinner() == 'X') {
+                displayController.win(true);
                 return;
             }
 
@@ -111,21 +111,21 @@ public class GameController {
                 total = 0;
 
                 System.out.print("\rSearching... Threads: ");
-                for (int i = 0; i < searchThreads.length; i++) {
-                    if (searchThreads[i] == null) continue;
-                    if (!searchThreads[i].isAlive()) {
-                        total += searchThreads[i].getNb();
-                        System.out.printf(" [%9s]", "Done");
+                for (SearchThread searchThread : searchThreads) {
+                    if (searchThread == null) continue;
+                    int nb = searchThread.getNb() / 1000;
+                    total += nb;
+                    if (!searchThread.isAlive()) {
+                        System.out.printf(" [%10s]", "Done");
                     } else {
                         done = false;
-                        total += searchThreads[i].getNb();
-                        System.out.printf(" [%,9dk]", searchThreads[i].getNb() / 1000);
+                        System.out.printf(" [%,9dk]", nb);
                     }
                 }
 
-                System.out.printf("  Total: %,12dk at", total / 1000);
+                System.out.printf("  Total: %,12dk at", total);
 
-                System.out.printf("  %,9d states/s", (total - lastTotal) * 1000 / WAITING_MILLIS);
+                System.out.printf("  %,9dk states/s", (total - lastTotal) * 1000 / WAITING_MILLIS);
 
                 try {
                     Thread.sleep(WAITING_MILLIS);
@@ -148,10 +148,13 @@ public class GameController {
                 }
             }
 
+            displayController.updateConfidence(bestScore);
+
             state = state.play(best);
 
-            if (state.getWinner() != ' ') {
-                displayController.win(state.getWinner() == 'X');
+            if (state.getWinner() == 'O') {
+                displayController.render(state);
+                displayController.win(false);
                 return;
             }
         }

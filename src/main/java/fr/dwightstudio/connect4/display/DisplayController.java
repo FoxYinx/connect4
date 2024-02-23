@@ -28,6 +28,13 @@ public abstract class DisplayController {
     public abstract void win(boolean human);
 
     /**
+     * Met à jour l'indice de confiance de l'intelligence artificielle
+     *
+     * @param confidence l'indice de confiance
+     */
+    public abstract void updateConfidence(int confidence);
+
+    /**
      * Nettoie l'affichage
      */
     public abstract void clear();

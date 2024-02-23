@@ -20,6 +20,11 @@ public class Java2DRenderer extends DisplayController {
     }
 
     @Override
+    public void updateConfidence(int confidence) {
+
+    }
+
+    @Override
     public void clear() {
 
     }
