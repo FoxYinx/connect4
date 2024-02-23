@@ -3,7 +3,7 @@ package fr.dwightstudio.connect4.game;
 public class SearchThread extends Thread {
 
     private int nb;
-    private final Runnable depthUpdater = () -> nb++;
+    private final Runnable nbUpdater = () -> nb++;
     private final GameState initialState;
     private int result;
 
@@ -13,7 +13,7 @@ public class SearchThread extends Thread {
 
     @Override
     public void run() {
-        result = GameController.negamax(initialState, Integer.MIN_VALUE, Integer.MAX_VALUE, depthUpdater);
+        result = GameController.negamax(initialState, Integer.MIN_VALUE, Integer.MAX_VALUE, nbUpdater);
     }
 
 

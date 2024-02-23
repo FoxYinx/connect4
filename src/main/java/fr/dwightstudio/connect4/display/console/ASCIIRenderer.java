@@ -52,8 +52,12 @@ public class ASCIIRenderer extends DisplayController {
     public void win(boolean human) {
         if (human) {
             System.out.println();
+            System.out.println("CONGLATURATION!!!");
+            System.out.println("YOU HAVE COMPLETED");
+            System.out.println("A GREAT GAME.");
+            System.out.println();
             System.out.println("AND PROOVED THE JUSTICE");
-            System.out.println("OF OUR CULTURE");
+            System.out.println("OF OUR CULTURE.");
             System.out.println();
             System.out.println("NOW GO AND REST OUR");
             System.out.println("HEROES !");

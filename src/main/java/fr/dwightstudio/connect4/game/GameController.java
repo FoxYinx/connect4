@@ -1,14 +1,13 @@
 package fr.dwightstudio.connect4.game;
 
+import fr.dwightstudio.connect4.TranspositionTable;
 import fr.dwightstudio.connect4.display.DisplayController;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 public class GameController {
 
     public static final int[] COLUMN_ORDER = new int[]{3, 4, 2, 5, 1, 6, 0};
 
-    private final static ConcurrentHashMap<GameState, Integer> TRANSPOSITION_TABLE = new ConcurrentHashMap<>(20000, 1.1F);
+    private static final TranspositionTable TRANSPOSITION_TABLE = new TranspositionTable();
 
     private final DisplayController displayController;
     private GameState state;
@@ -29,7 +28,9 @@ public class GameController {
      */
     public static int negamax(GameState state, int alpha, int beta, Runnable depthUpdater) {
         depthUpdater.run();
-        if (TRANSPOSITION_TABLE.containsKey(state)) return TRANSPOSITION_TABLE.get(state);
+
+        Integer rtn = TRANSPOSITION_TABLE.get(state);
+        if (rtn != null) return rtn;
 
         // check for draw game
         if (state.isDraw()) return 0;
@@ -92,10 +93,15 @@ public class GameController {
                 }
             }
 
+            if (state.getWinner() != ' ') {
+                displayController.win(state.getWinner() == 'X');
+                return;
+            }
+
             final int WAITING_MILLIS = 100;
 
             boolean done = false;
-            int lastTotal = 0;
+            int lastTotal;
             int total = 0;
             System.out.println();
 
@@ -107,14 +113,19 @@ public class GameController {
                 System.out.print("\rSearching... Threads: ");
                 for (int i = 0; i < searchThreads.length; i++) {
                     if (searchThreads[i] == null) continue;
-                    done &= !searchThreads[i].isAlive();
-                    total += searchThreads[i].getNb();
-                    System.out.printf(" %6d", searchThreads[i].getNb());
+                    if (!searchThreads[i].isAlive()) {
+                        total += searchThreads[i].getNb();
+                        System.out.printf(" [%9s]", "Done");
+                    } else {
+                        done = false;
+                        total += searchThreads[i].getNb();
+                        System.out.printf(" [%,9dk]", searchThreads[i].getNb() / 1000);
+                    }
                 }
 
-                System.out.printf("  Total: %9d", total);
+                System.out.printf("  Total: %,12dk at", total / 1000);
 
-                System.out.printf("  %4d states/s", (total - lastTotal) * 1000 / WAITING_MILLIS);
+                System.out.printf("  %,9d states/s", (total - lastTotal) * 1000 / WAITING_MILLIS);
 
                 try {
                     Thread.sleep(WAITING_MILLIS);
@@ -138,6 +149,11 @@ public class GameController {
             }
 
             state = state.play(best);
+
+            if (state.getWinner() != ' ') {
+                displayController.win(state.getWinner() == 'X');
+                return;
+            }
         }
     }
 }

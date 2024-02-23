@@ -70,8 +70,7 @@ public class GameState {
     }
 
     public GameState() {
-        //this(0b000000011111110000000L, 0b111111100000001111111L, 0);
-        this(0L, 0L, 0);
+        this(5461,10922, 0);
     }
 
     public GameState play(int x) {
@@ -131,14 +130,14 @@ public class GameState {
     public char getWinner() {
         // Cross
         for (long mask : WINNING_MASK) {
-            if (~(crossGrid | mask) == 0L) {
+            if ((crossGrid & mask) == mask) {
                 return 'X';
             }
         }
 
         // Circle
         for (long mask : WINNING_MASK) {
-            if (~(circleGrid | mask) == 0L) {
+            if ((circleGrid & mask) == mask) {
                 return 'O';
             }
         }
@@ -160,5 +159,10 @@ public class GameState {
     @Override
     public int hashCode() {
         return (int) (this.circleGrid + (this.crossGrid | this.circleGrid)) % ~1;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%d,%d]", crossGrid, circleGrid);
     }
 }
