@@ -157,9 +157,8 @@ public class GameState {
         } else return false;
     }
 
-    @Override
-    public int hashCode() {
-        return (int) (this.circleGrid + (this.crossGrid | this.circleGrid)) % ~1;
+    public long longHashCode() {
+        return this.circleGrid + (this.crossGrid | this.circleGrid);
     }
 
     @Override

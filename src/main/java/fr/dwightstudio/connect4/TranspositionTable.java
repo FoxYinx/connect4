@@ -5,11 +5,14 @@ import fr.dwightstudio.connect4.game.GameState;
 public class TranspositionTable {
 
     public static final int SIZE = 100000000;
-    public static final Node[] TABLE = new Node[SIZE];
+    private static final Node[] TABLE = new Node[SIZE];
+
+    private int getIndex(GameState state) {
+        return (int) (state.longHashCode() % ((long) SIZE));
+    }
 
     public Integer get(GameState state) {
-        int index = state.hashCode() % SIZE;
-        if (index < 0) return null;
+        int index = getIndex(state);
 
         Node node = TABLE[index];
 
@@ -18,10 +21,9 @@ public class TranspositionTable {
     }
 
     public void put(GameState state, int score) {
-        int index = state.hashCode() % SIZE;
-        if (index < 0) return;
+        int index = getIndex(state);
 
-        TABLE[state.hashCode() % SIZE] = new Node(state, score);
+        TABLE[index] = new Node(state, score);
     }
 
     private record Node(GameState state, int score) {}

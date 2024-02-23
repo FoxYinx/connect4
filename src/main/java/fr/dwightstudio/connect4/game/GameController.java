@@ -10,7 +10,7 @@ public class GameController {
     static {
         COLUMN_ORDER = new int[GameState.GRID_WIDTH];
 
-        int center = Math.ceilDiv(GameState.GRID_WIDTH, 2);
+        int center = Math.floorDiv(GameState.GRID_WIDTH, 2);
         int offset = 0;
         boolean negative = false;
 
@@ -49,8 +49,8 @@ public class GameController {
      *  - negative score if your opponent can force you to lose. Your score is the opposite of
      *    the number of moves before the end you will lose (the faster you lose, the lower your score).
      */
-    public static int negamax(GameState state, int alpha, int beta, Runnable depthUpdater) {
-        depthUpdater.run();
+    public static int negamax(GameState state, int alpha, int beta, Runnable nbUpdater) {
+        nbUpdater.run();
 
         Integer rtn = TRANSPOSITION_TABLE.get(state);
         if (rtn != null) return rtn;
@@ -60,7 +60,7 @@ public class GameController {
 
         // check if current player can win next move
         for (int x = 0; x < GameState.GRID_WIDTH; x++) {
-            if (state.isPlayable(x) && (state.play(x).getWinner() == 'O')) {
+            if (state.isPlayable(x) && (state.play(x).getWinner() != ' ')) {
                 return (GameState.GRID_WIDTH * GameState.GRID_HEIGHT + 1 - state.getNbMoves()) / 2;
             }
         }
@@ -82,7 +82,7 @@ public class GameController {
                 // It's opponent turn in P2 position after current player plays x column.
                 GameState state2 = state.play(x);
                 // explore opponent's score within [-beta;-alpha] windows:
-                int score = -negamax(state2, -beta, -alpha, depthUpdater);
+                int score = -negamax(state2, -beta, -alpha, nbUpdater);
                 // no need to have good precision for score better than beta (opponent's score worse than -beta)
                 // no need to check for score worse than alpha (opponent's score worse better than -alpha)
 
