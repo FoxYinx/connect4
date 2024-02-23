@@ -52,6 +52,8 @@ public class GameController {
     public static int negamax(GameState state, int alpha, int beta, Runnable nbUpdater) {
         nbUpdater.run();
 
+        assert(alpha < beta);
+
         //Integer rtn = TRANSPOSITION_TABLE.get(state);
         //if (rtn != null) return rtn;
 
@@ -160,7 +162,7 @@ public class GameController {
             System.out.println();
 
             int best = 0;
-            int bestScore = -GameState.GRID_WIDTH * GameState.GRID_HEIGHT;
+            int bestScore = -(GameState.FLAT_LENGTH - state.getNbMoves())/2;
 
             for (int i = 0; i < searchThreads.length; i++) {
                 if (searchThreads[i] == null) continue;

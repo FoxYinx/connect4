@@ -1,6 +1,5 @@
 package fr.dwightstudio.connect4.display;
 
-import fr.dwightstudio.connect4.game.GamePosition;
 import fr.dwightstudio.connect4.game.GameState;
 
 public abstract class DisplayController {

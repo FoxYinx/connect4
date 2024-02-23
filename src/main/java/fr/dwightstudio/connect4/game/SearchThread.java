@@ -13,9 +13,8 @@ public class SearchThread extends Thread {
 
     @Override
     public void run() {
-        result = GameController.negamax(initialState, Integer.MIN_VALUE, Integer.MAX_VALUE, nbUpdater);
+        result = -GameController.negamax(initialState, -GameState.FLAT_LENGTH/2, GameState.FLAT_LENGTH/2, nbUpdater);
     }
-
 
     public int getResult() {
         return result;

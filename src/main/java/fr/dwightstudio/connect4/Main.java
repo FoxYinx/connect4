@@ -31,7 +31,7 @@ public class Main {
         } else if (choice.equalsIgnoreCase("learn")) {
             crippy();
         } else {
-            throw new RuntimeException("Make a valid choice dummy (1 or 2)");
+            throw new RuntimeException("Make a valid choice dummy (1 or 2 or 3)");
         }
         gameController = new GameController(displayController);
         gameController.play();
