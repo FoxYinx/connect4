@@ -5,7 +5,30 @@ import fr.dwightstudio.connect4.display.DisplayController;
 
 public class GameController {
 
-    public static final int[] COLUMN_ORDER = new int[]{3, 4, 2, 5, 1, 6, 0};
+    public static final int[] COLUMN_ORDER;
+
+    static {
+        COLUMN_ORDER = new int[GameState.GRID_WIDTH];
+
+        int center = Math.ceilDiv(GameState.GRID_WIDTH, 2);
+        int offset = 0;
+        boolean negative = false;
+
+        for (int i = 0; i < GameState.GRID_WIDTH; i++) {
+            if (negative) {
+                COLUMN_ORDER[i] = center - offset;
+            } else {
+                COLUMN_ORDER[i] = center + offset;
+                offset++;
+            }
+
+            if (offset == 0) {
+                offset++;
+            }
+
+            negative = !negative;
+        }
+    }
 
     private static final TranspositionTable TRANSPOSITION_TABLE = new TranspositionTable();
 
@@ -63,12 +86,12 @@ public class GameController {
                 // no need to have good precision for score better than beta (opponent's score worse than -beta)
                 // no need to check for score worse than alpha (opponent's score worse better than -alpha)
 
-                if (score >= beta)
-                    // prune the exploration if we find a possible move better than what we were looking for.
-                    return score;
+                // prune the exploration if we find a possible move better than what we were looking for.
+                if (score >= beta) return score;
+
                 // reduce the [alpha;beta] window for next exploration, as we only
-                if (score > alpha) alpha = score;
                 // need to search for a position that is better than the best so far.
+                if (score > alpha) alpha = score;
             }
         }
 
