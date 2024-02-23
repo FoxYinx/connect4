@@ -70,6 +70,7 @@ public class GameState {
     }
 
     public GameState() {
+        //this(0b000000011111110000000L, 0b111111100000001111111L, 0);
         this(0L, 0L, 0);
     }
 
@@ -147,5 +148,17 @@ public class GameState {
 
     public int getNbMoves() {
         return nbMoves;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof GameState state) {
+            return state.crossGrid == this.crossGrid && state.circleGrid == this.circleGrid;
+        } else return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (this.circleGrid + (this.crossGrid | this.circleGrid)) % ~1;
     }
 }

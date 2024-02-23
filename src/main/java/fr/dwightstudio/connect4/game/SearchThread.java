@@ -1,9 +1,9 @@
 package fr.dwightstudio.connect4.game;
 
-import fr.dwightstudio.connect4.display.DisplayController;
-
 public class SearchThread extends Thread {
 
+    private int nb;
+    private final Runnable depthUpdater = () -> nb++;
     private final GameState initialState;
     private int result;
 
@@ -11,18 +11,17 @@ public class SearchThread extends Thread {
         this.initialState = initialState;
     }
 
-    public SearchThread(GameState initialState, DisplayController displayController) {
-        this(initialState);
-
-    }
-
     @Override
     public void run() {
-        result = GameController.negamax(initialState, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        result = GameController.negamax(initialState, Integer.MIN_VALUE, Integer.MAX_VALUE, depthUpdater);
     }
 
 
     public int getResult() {
         return result;
+    }
+
+    public int getNb() {
+        return nb;
     }
 }
