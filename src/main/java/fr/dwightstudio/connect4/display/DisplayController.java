@@ -34,9 +34,10 @@ public abstract class DisplayController {
     /**
      * Met à jour l'indice de confiance de l'intelligence artificielle
      *
+     * @param state l'état actuel du jeu
      * @param confidence l'indice de confiance
      */
-    public abstract void updateConfidence(int confidence);
+    public abstract void updateConfidence(GameState state, int confidence);
 
     /**
      * Nettoie l'affichage

@@ -15,8 +15,11 @@ public class GameController {
     public void play() {
         displayController.render(state);
 
+        int currentNb = 0;
+
         while (true) {
             state = state.play(displayController.play(state));
+            currentNb++;
 
             displayController.render(state);
 
@@ -57,8 +60,8 @@ public class GameController {
             final int WAITING_MILLIS = 100;
 
             boolean done = false;
-            int lastTotal;
-            int total = 0;
+            long lastTotal;
+            long total = 0;
 
             long start = System.currentTimeMillis();
 
@@ -70,7 +73,7 @@ public class GameController {
                 System.out.print("\rSearching...  Threads: ");
                 for (SearchThread searchThread : searchThreads) {
                     if (searchThread == null) continue;
-                    int nb = searchThread.getNb() / 1000;
+                    long nb = searchThread.getNb() / 1000;
                     total += nb;
                     if (!searchThread.isAlive()) {
                         System.out.printf(" [%9s]", "Done");
@@ -108,10 +111,11 @@ public class GameController {
             }
 
             state = state.play(best);
+            currentNb++;
 
             displayController.render(state);
 
-            displayController.updateConfidence(bestScore);
+            displayController.updateConfidence(state, bestScore);
 
             if (state.isDraw()) {
                 displayController.draw();

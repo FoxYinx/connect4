@@ -25,7 +25,7 @@ public class Java2DRenderer extends DisplayController {
     }
 
     @Override
-    public void updateConfidence(int confidence) {
+    public void updateConfidence(GameState state, int confidence) {
 
     }
 

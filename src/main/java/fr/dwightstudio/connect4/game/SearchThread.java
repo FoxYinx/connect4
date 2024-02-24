@@ -31,7 +31,7 @@ public class SearchThread extends Thread {
 
     private static final TranspositionTable TRANSPOSITION_TABLE = new TranspositionTable();
 
-    private int nb;
+    private long nb;
     private final GameState initialState;
     private int result;
 
@@ -110,7 +110,7 @@ public class SearchThread extends Thread {
         return result;
     }
 
-    public int getNb() {
+    public long getNb() {
         return nb;
     }
 }
