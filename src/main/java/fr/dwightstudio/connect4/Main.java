@@ -15,10 +15,12 @@ public class Main {
         DisplayController displayController = null;
         String choice;
 
-        System.out.println("ASCII or GPU-Intensive?");
         System.out.println("1 -> Play with ASCII Renderer");
         System.out.println("2 -> Play with gPu-InTeNsIvE Renderer");
         System.out.println("3 -> Create Board");
+        System.out.println();
+        System.out.println("ASCII or GPU-Intensive?");
+        System.out.print("> ");
         choice = scanner.nextLine().strip();
         if (choice.equals("1")) {
             displayController = new ASCIIRenderer();

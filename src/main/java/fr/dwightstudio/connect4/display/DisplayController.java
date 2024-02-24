@@ -12,7 +12,7 @@ public abstract class DisplayController {
     public abstract void render(GameState gameState);
 
     /**
-     * Fait le rendu de l'état actuel du jeu et demande au joueur d'effectuer une action
+     * Demande au joueur d'effectuer une action
      *
      * @param gameState l'état actuel du jeu
      * @return une action décidée par le joueur
@@ -25,6 +25,11 @@ public abstract class DisplayController {
      * @param human vrai si c'est l'humain qui a gagné
      */
     public abstract void win(boolean human);
+
+    /**
+     * Indique que le jeu s'est terminé sur une égalité
+     */
+    public abstract void draw();
 
     /**
      * Met à jour l'indice de confiance de l'intelligence artificielle

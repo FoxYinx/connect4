@@ -14,6 +14,7 @@ public class ASCIIRenderer extends DisplayController {
 
     private static String askForMove() {
         System.out.println("Choose your poison: (1-7)");
+        System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
@@ -28,12 +29,11 @@ public class ASCIIRenderer extends DisplayController {
             System.out.println("|");
         }
         System.out.println(" 1 2 3 4 5 6 7 ");
+        System.out.println();
     }
 
     @Override
     public int play(GameState gameState) {
-        render(gameState);
-
         String choice;
         boolean correctChoice = false;
         do {
@@ -50,6 +50,7 @@ public class ASCIIRenderer extends DisplayController {
 
     @Override
     public void win(boolean human) {
+        System.out.println("   " + (human ? "VICTORY" : "DEFEAT"));
         System.out.println();
         if (human) {
             System.out.println("CONGLATURATION!!!");
@@ -64,6 +65,17 @@ public class ASCIIRenderer extends DisplayController {
         } else {
             System.out.println("HUMANITY IS DOOMED");
         }
+    }
+
+    @Override
+    public void draw() {
+        System.out.println();
+        System.out.println("   DRAW");
+        System.out.println();
+
+        System.out.println("FIRE THE GUY THAT BUILT");
+        System.out.println("THESE ROBOTS AND BUILD");
+        System.out.println("BETTER ROBOTS");
     }
 
     @Override

@@ -3,11 +3,11 @@ package fr.dwightstudio.connect4.game;
 import java.util.ArrayList;
 
 public class GameState {
-    public static final int GRID_HEIGHT = 4; //6
+    public static final int GRID_HEIGHT = 4; // 6
     public static final int GRID_WIDTH = 7;
     public static final int FLAT_LENGTH = GRID_HEIGHT * GRID_WIDTH;
 
-    public static final Long[] WINNING_MASK;
+    public static final Long[] WINNING_MASKS;
 
     static {
         ArrayList<Long> rtn = new ArrayList<>();
@@ -56,7 +56,7 @@ public class GameState {
             }
         }
 
-        WINNING_MASK = rtn.toArray(rtn.toArray(new Long[0]));
+        WINNING_MASKS = rtn.toArray(rtn.toArray(new Long[0]));
     }
 
     private final long crossGrid;
@@ -74,10 +74,14 @@ public class GameState {
         this(0, 0, 0);
     }
 
+    public boolean isItCrossTurn() {
+        return (nbMoves & 1) == 0;
+    }
+
     public GameState play(int x) {
         int y = getFreeHeight(x);
         if (y == -1) throw new IllegalArgumentException("Column is full");
-        if ((nbMoves & 1) == 0) {
+        if (isItCrossTurn()) {
             return placeCross(new GamePosition(x, y));
         } else {
             return placeCircle(new GamePosition(x, y));
@@ -128,16 +132,34 @@ public class GameState {
         return nbMoves == FLAT_LENGTH;
     }
 
+    public boolean isWinningState() {
+        if (isItCrossTurn()) {
+            for (long mask : WINNING_MASKS) {
+                if ((circleGrid & mask) == mask) {
+                    return true;
+                }
+            }
+        } else {
+            for (long mask : WINNING_MASKS) {
+                if ((crossGrid & mask) == mask) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public char getWinner() {
         // Cross
-        for (long mask : WINNING_MASK) {
+        for (long mask : WINNING_MASKS) {
             if ((crossGrid & mask) == mask) {
                 return 'X';
             }
         }
 
         // Circle
-        for (long mask : WINNING_MASK) {
+        for (long mask : WINNING_MASKS) {
             if ((circleGrid & mask) == mask) {
                 return 'O';
             }
