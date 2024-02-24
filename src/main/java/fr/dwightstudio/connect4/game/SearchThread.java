@@ -41,7 +41,7 @@ public class SearchThread extends Thread {
 
     @Override
     public void run() {
-        result = -negamax(initialState, -GameState.FLAT_LENGTH/2, GameState.FLAT_LENGTH/2);
+        result = -negamax(initialState, -GameState.FLAT_LENGTH/2, GameState.FLAT_LENGTH/2, 0);
     }
 
     /*
@@ -53,10 +53,8 @@ public class SearchThread extends Thread {
      *  - negative score if your opponent can force you to lose. Your score is the opposite of
      *    the number of moves before the end you will lose (the faster you lose, the lower your score).
      */
-    private int negamax(GameState state, int alpha, int beta) {
+    private int negamax(GameState state, int alpha, int beta, int depth) {
         nb++;
-
-        assert(alpha < beta);
 
         Integer rtn = TRANSPOSITION_TABLE.get(state);
         if (rtn != null) return rtn;
@@ -88,7 +86,7 @@ public class SearchThread extends Thread {
                 // It's opponent turn in P2 position after current player plays x column.
                 GameState state2 = state.play(x);
                 // explore opponent's score within [-beta;-alpha] windows:
-                int score = -negamax(state2, -beta, -alpha);
+                int score = -negamax(state2, -beta, -alpha, depth + 1);
                 // no need to have good precision for score better than beta (opponent's score worse than -beta)
                 // no need to check for score worse than alpha (opponent's score worse better than -alpha)
 

@@ -14,6 +14,7 @@ public class Main {
         GameController gameController;
         DisplayController displayController = null;
         String choice;
+        boolean cheat = false;
 
         System.out.println("1 -> Play with ASCII Renderer");
         System.out.println("2 -> Play with gPu-InTeNsIvE Renderer");
@@ -32,10 +33,13 @@ public class Main {
             return;
         } else if (choice.equalsIgnoreCase("learn")) {
             crippy();
+        } else if (choice.equalsIgnoreCase("cheat")) {
+            displayController = new ASCIIRenderer();
+            cheat = true;
         } else {
             throw new RuntimeException("Make a valid choice dummy (1 or 2 or 3)");
         }
-        gameController = new GameController(displayController);
+        gameController = new GameController(displayController, cheat);
         gameController.play();
     }
 
