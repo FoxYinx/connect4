@@ -85,7 +85,7 @@ public class ASCIIRenderer extends DisplayController {
         if (confidence > 0) {
             System.out.println("(Wins at worse in " + ((GameState.FLAT_LENGTH / 2) - confidence - state.getNbMoves() / 2) + " moves)");
         } else if (confidence < 0) {
-            System.out.println("(Loses at best in " + (confidence + state.getNbMoves() / 2 + (GameState.FLAT_LENGTH / 2)) + " moves)");
+            System.out.println("(Loses at best in " + (confidence - state.getNbMoves() / 2 + (GameState.FLAT_LENGTH / 2)) + " moves)");
         } else {
             System.out.println("(Draw at worse)");
         }
