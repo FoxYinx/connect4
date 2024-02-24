@@ -80,7 +80,23 @@ public class ASCIIRenderer extends DisplayController {
 
     @Override
     public void updateConfidence(int confidence) {
-        System.out.println("Confidence: " + confidence);
+        System.out.print("Confidence: " + confidence + " ");
+
+        if (confidence > 0) {
+            if (confidence == 1) {
+                System.out.println("(Wins in any case)");
+            } else {
+                System.out.println("(Wins at worse in " + ((GameState.FLAT_LENGTH / 2) - confidence) + " moves)");
+            }
+        } else if (confidence < 0) {
+            if (confidence == 1) {
+                System.out.println("(Loses in any case)");
+            } else {
+                System.out.println("(Wins at worse in " + (confidence - (GameState.FLAT_LENGTH / 2)) + " moves)");
+            }
+        } else {
+            System.out.println("(Draw at worse)");
+        }
     }
 
     @Override
