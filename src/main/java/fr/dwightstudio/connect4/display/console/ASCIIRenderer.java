@@ -93,6 +93,6 @@ public class ASCIIRenderer extends DisplayController {
 
     @Override
     public void clear() {
-        System.out.println("The screen has been cleared");
+        System.out.println("The screen has been cleared (Kidding)");
     }
 }
