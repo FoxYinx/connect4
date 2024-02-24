@@ -58,8 +58,8 @@ public class SearchThread extends Thread {
 
         assert(alpha < beta);
 
-        //Integer rtn = TRANSPOSITION_TABLE.get(state);
-        //if (rtn != null) return rtn;
+        Integer rtn = TRANSPOSITION_TABLE.get(state);
+        if (rtn != null) return rtn;
 
         // check for draw game
         if (state.isDraw()) return 0;
@@ -101,7 +101,7 @@ public class SearchThread extends Thread {
             }
         }
 
-        //TRANSPOSITION_TABLE.put(state, alpha);
+        TRANSPOSITION_TABLE.put(state, alpha);
 
         return alpha;
     }
