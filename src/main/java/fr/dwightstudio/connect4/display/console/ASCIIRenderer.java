@@ -39,7 +39,7 @@ public class ASCIIRenderer extends DisplayController {
         do {
             choice = askForMove();
             switch (choice) {
-                case "1", "2", "3", "4", "5", "6", "7" -> correctChoice = true;
+                case "1", "2", "3", "4", "5", "6", "7" -> correctChoice = gameState.isPlayable(Integer.parseInt(choice));
                 default -> {
                 }
             }
