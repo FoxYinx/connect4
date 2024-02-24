@@ -34,9 +34,11 @@ public class SearchThread extends Thread {
     private long nb;
     private final GameState initialState;
     private int result;
+    private int hintScore;
 
     public SearchThread(GameState initialState) {
         this.initialState = initialState;
+        hintScore = Integer.MIN_VALUE;
     }
 
     @Override
@@ -100,6 +102,12 @@ public class SearchThread extends Thread {
         }
 
         TRANSPOSITION_TABLE.put(state, alpha);
+
+        if (depth == 1) {
+            if (-alpha >= hintScore) {
+                hintScore = -alpha;
+            }
+        }
 
         return alpha;
     }

@@ -7,7 +7,6 @@ public class GameController {
     private final DisplayController displayController;
     private GameState state;
     private final boolean cheat;
-    private int confidence;
 
     public GameController(DisplayController displayController, boolean cheat) {
         this.displayController = displayController;
@@ -47,28 +46,22 @@ public class GameController {
                 }
             }
 
-            int best = search(state);
+            SearchResult result = search(state);
 
-            state = state.play(best);
+            state = state.play(result.move());
 
             displayController.render(state);
 
-            displayController.updateConfidence(state, confidence);
+            displayController.updateConfidence(state, result.confidence());
 
             if (state.isDraw()) {
                 displayController.draw();
                 return;
             }
-
-            if (cheat) {
-                int hint = search(state);
-
-                System.out.println("Hint: play " + (hint + 1) + " with a confidence of " + confidence);
-            }
         }
     }
 
-    public int search(GameState state) {
+    public SearchResult search(GameState state) {
         SearchThread[] searchThreads = new SearchThread[GameState.GRID_WIDTH];
 
         for (int i = 0; i < GameState.GRID_WIDTH; i++) {
@@ -132,7 +125,6 @@ public class GameController {
             }
         }
 
-        confidence = bestScore;
-        return best;
+        return new SearchResult(best, bestScore);
     }
 }

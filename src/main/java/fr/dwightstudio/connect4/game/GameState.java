@@ -3,7 +3,7 @@ package fr.dwightstudio.connect4.game;
 import java.util.ArrayList;
 
 public class GameState {
-    public static final int GRID_HEIGHT = 5; // 6
+    public static final int GRID_HEIGHT = 4; // 6
     public static final int GRID_WIDTH = 7;
     public static final int FLAT_LENGTH = GRID_HEIGHT * GRID_WIDTH;
 
@@ -17,7 +17,7 @@ public class GameState {
             for (int y = 0; y < GRID_HEIGHT; y++) {
                 long mask = 0L;
                 for (int d = 0; d < 4; d++) {
-                    mask |= (1L << new GamePosition(x + d, y).getFlatIndex());
+                    mask |= (1L << getFlatIndex(x + d, y));
                 }
                 rtn.add(mask);
             }
@@ -28,7 +28,7 @@ public class GameState {
             for (int y = 0; y < GRID_HEIGHT - 3; y++) {
                 long mask = 0L;
                 for (int d = 0; d < 4; d++) {
-                    mask |= (1L << new GamePosition(x, y + d).getFlatIndex());
+                    mask |= (1L << getFlatIndex(x, y + d));
                 }
                 rtn.add(mask);
             }
@@ -39,7 +39,7 @@ public class GameState {
             for (int y = 0; y < GRID_HEIGHT - 3; y++) {
                 long mask = 0L;
                 for (int d = 0; d < 4; d++) {
-                    mask |= (1L << new GamePosition(x + d, y + d).getFlatIndex());
+                    mask |= (1L << getFlatIndex(x + d, y + d));
                 }
                 rtn.add(mask);
             }
@@ -50,7 +50,7 @@ public class GameState {
             for (int y = 3; y < GRID_HEIGHT; y++) {
                 long mask = 0L;
                 for (int d = 0; d < 4; d++) {
-                    mask |= (1L << new GamePosition(x + d, y - d).getFlatIndex());
+                    mask |= (1L << getFlatIndex(x + d, y - d));
                 }
                 rtn.add(mask);
             }
@@ -62,16 +62,18 @@ public class GameState {
     private final long crossGrid;
     private final long circleGrid;
     private final int nbMoves;
+    private final int lastMove;
 
-    private GameState(long crossGrid, long circleGrid, int nbMoves) {
+    private GameState(long crossGrid, long circleGrid, int nbMoves, int lastMove) {
         this.crossGrid = crossGrid;
         this.circleGrid = circleGrid;
         this.nbMoves = nbMoves;
+        this.lastMove = lastMove;
     }
 
     public GameState() {
-        //this(5461,10922, 0);
-        this(0, 0, 0);
+        //this(5461,10922, 0, -1);
+        this(0, 0, 0, -1);
     }
 
     public boolean isItCrossTurn() {
@@ -82,25 +84,25 @@ public class GameState {
         int y = getFreeHeight(x);
         if (y == -1) throw new IllegalArgumentException("Column is full");
         if (isItCrossTurn()) {
-            return placeCross(new GamePosition(x, y));
+            return placeCross(x, y);
         } else {
-            return placeCircle(new GamePosition(x, y));
+            return placeCircle(x, y);
         }
     }
 
-    public GameState placeCross(GamePosition pos) {
-        long nCrossGrid = crossGrid | (1L << pos.getFlatIndex());
-        return new GameState(nCrossGrid, circleGrid, nbMoves + 1);
+    public GameState placeCross(int x, int y) {
+        long nCrossGrid = crossGrid | (1L << getFlatIndex(x, y));
+        return new GameState(nCrossGrid, circleGrid, nbMoves + 1, x);
     }
 
-    public GameState placeCircle(GamePosition pos) {
-        long nCircleGrid = circleGrid | (1L << pos.getFlatIndex());
-        return new GameState(crossGrid, nCircleGrid, nbMoves + 1);
+    public GameState placeCircle(int x, int y) {
+        long nCircleGrid = circleGrid | (1L << getFlatIndex(x, y));
+        return new GameState(crossGrid, nCircleGrid, nbMoves + 1, x);
     }
 
-    public char get(GamePosition pos) {
-        long cross = (crossGrid >>> pos.getFlatIndex()) & 1;
-        long circle = (circleGrid >>> pos.getFlatIndex()) & 1;
+    public char get(int x, int y) {
+        long cross = (crossGrid >>> getFlatIndex(x, y)) & 1;
+        long circle = (circleGrid >>> getFlatIndex(x, y)) & 1;
 
         if (cross == 1 && circle == 0) {
             return 'X';
@@ -116,7 +118,7 @@ public class GameState {
     public int getFreeHeight(int x) {
         long grid = crossGrid | circleGrid;
         for (int y = 0; y < GRID_HEIGHT; y++) {
-            if (((grid >>> new GamePosition(x, y).getFlatIndex()) & 1L) == 0) {
+            if (((grid >>> getFlatIndex(x, y)) & 1L) == 0) {
                 return y;
             }
         }
@@ -125,7 +127,7 @@ public class GameState {
     }
 
     public boolean isPlayable(int x) {
-        return get(new GamePosition(x, GRID_HEIGHT-1)) == ' ';
+        return get(x, GRID_HEIGHT-1) == ' ';
     }
 
     public boolean isDraw() {
@@ -172,6 +174,10 @@ public class GameState {
         return nbMoves;
     }
 
+    private static int getFlatIndex(int x, int y) {
+        return x + y * GameState.GRID_WIDTH;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof GameState state) {
@@ -186,5 +192,9 @@ public class GameState {
     @Override
     public String toString() {
         return String.format("[%d,%d]", crossGrid, circleGrid);
+    }
+
+    public int getLastMove() {
+        return lastMove;
     }
 }
