@@ -1,6 +1,6 @@
 package fr.dwightstudio.connect4.game;
 
-import fr.dwightstudio.connect4.TranspositionTable;
+import java.util.Arrays;
 
 public class SearchThread extends Thread {
 
@@ -27,6 +27,11 @@ public class SearchThread extends Thread {
 
             negative = !negative;
         }
+
+        for (int i = 0; i < GameState.GRID_WIDTH; i++) {
+            int finalI = i;
+            if (Arrays.stream(COLUMN_ORDER).noneMatch(n -> finalI == n)) throw new RuntimeException("Column order array is incomplete");
+        }
     }
 
     private static final TranspositionTable TRANSPOSITION_TABLE = new TranspositionTable();
@@ -43,7 +48,22 @@ public class SearchThread extends Thread {
 
     @Override
     public void run() {
-        result = -negamax(initialState, -GameState.FLAT_LENGTH/2, GameState.FLAT_LENGTH/2, 0);
+        int min = -(GameState.FLAT_LENGTH - initialState.getNbMoves())/2;
+        int max = (GameState.FLAT_LENGTH + 1 - initialState.getNbMoves())/2;
+
+        // iteratively narrow the min-max exploration window
+        while(min < max) {
+            int med = min + (max - min)/2;
+            if(med <= 0 && min/2 < med) med = min/2;
+            else if(med >= 0 && max/2 > med) med = max/2;
+            int r = negamax(initialState, med, med + 1, 0);   // use a null depth window to know if the actual score is greater or smaller than med
+            if(r <= med) max = r;
+            else min = r;
+        }
+
+        result = -min;
+
+        //result = -negamax(initialState, -GameState.FLAT_LENGTH/2, GameState.FLAT_LENGTH/2, 0);
     }
 
     /*

@@ -68,7 +68,6 @@ public class ASCIIRenderer extends DisplayController {
 
     @Override
     public void draw() {
-        System.out.println();
         System.out.println("   DRAW");
         System.out.println();
 
@@ -81,10 +80,13 @@ public class ASCIIRenderer extends DisplayController {
     public void updateConfidence(GameState state, int confidence) {
         System.out.print("Confidence: " + confidence + " ");
 
+        int moves;
         if (confidence > 0) {
-            System.out.println("(Wins at worse in " + ((GameState.FLAT_LENGTH / 2) - confidence - state.getNbMoves() / 2) + " moves)");
+            moves = ((GameState.FLAT_LENGTH / 2) - confidence - state.getNbMoves() / 2);
+            System.out.println("(Wins at worse in " + moves + " move" + (moves > 1 ? "s" : "") + ")");
         } else if (confidence < 0) {
-            System.out.println("(Loses at worse in " + (confidence - state.getNbMoves() / 2 + (GameState.FLAT_LENGTH / 2)) + " moves)");
+            moves = (confidence - state.getNbMoves() / 2 + (GameState.FLAT_LENGTH / 2)) + 1;
+            System.out.println("(Loses at worse in " + moves + " move" + (moves > 1 ? "s" : "") + ")");
         } else {
             System.out.println("(Draw at worse)");
         }

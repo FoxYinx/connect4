@@ -1,4 +1,4 @@
-package fr.dwightstudio.connect4;
+package fr.dwightstudio.connect4.game;
 
 import fr.dwightstudio.connect4.game.GameState;
 
