@@ -77,16 +77,18 @@ abstract public class GameController {
 
         int best = 0;
         int bestScore = -(GameState.FLAT_LENGTH - state.getNbMoves()) / 2;
+        int meanScore = 0;
 
         for (int i = 0; i < GameState.GRID_WIDTH; i++) {
             if (searchThreads[i] == null) continue;
             int score = searchThreads[i].getResult();
+            meanScore += score;
             if (score >= bestScore) {
                 bestScore = score;
                 best = i;
             }
         }
 
-        return new SearchResult(best, bestScore);
+        return new SearchResult(best, bestScore, (float) meanScore / (float) GameState.GRID_WIDTH);
     }
 }

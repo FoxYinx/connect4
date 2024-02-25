@@ -1,6 +1,7 @@
 package fr.dwightstudio.connect4.display;
 
 import fr.dwightstudio.connect4.game.GameState;
+import fr.dwightstudio.connect4.game.SearchResult;
 
 public abstract class DisplayController {
 
@@ -35,9 +36,9 @@ public abstract class DisplayController {
      * Met à jour l'indice de confiance de l'intelligence artificielle
      *
      * @param state l'état actuel du jeu
-     * @param confidence l'indice de confiance
+     * @param searchResult les résultats de la recherche
      */
-    public abstract void updateConfidence(GameState state, int confidence);
+    public abstract void updateConfidence(GameState state, SearchResult searchResult);
 
     /**
      * Nettoie l'affichage

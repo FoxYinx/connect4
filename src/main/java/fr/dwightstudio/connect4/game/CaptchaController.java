@@ -32,7 +32,7 @@ public class CaptchaController extends GameController {
             state = state.play(result.move());
 
             displayController.render(state);
-            displayController.updateConfidence(state, result.confidence());
+            displayController.updateConfidence(state, result);
 
             if (state.isDraw()) {
                 displayController.draw();

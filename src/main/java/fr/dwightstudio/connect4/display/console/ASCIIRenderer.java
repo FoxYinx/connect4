@@ -2,6 +2,7 @@ package fr.dwightstudio.connect4.display.console;
 
 import fr.dwightstudio.connect4.display.DisplayController;
 import fr.dwightstudio.connect4.game.GameState;
+import fr.dwightstudio.connect4.game.SearchResult;
 
 import java.util.Scanner;
 
@@ -77,15 +78,16 @@ public class ASCIIRenderer extends DisplayController {
     }
 
     @Override
-    public void updateConfidence(GameState state, int confidence) {
-        System.out.print("Confidence: " + confidence + " ");
+    public void updateConfidence(GameState state, SearchResult result) {
+        System.out.printf("Mean condidence: %2.2f (%s)\n", result.meanConfidence(), (result.meanConfidence() == 0 ? "Draw" : result.meanConfidence() > 0 ? "Should win" : "Should lose"));
+        System.out.print("Confidence: " + result.confidence() + " ");
 
         int moves;
-        if (confidence > 0) {
-            moves = ((GameState.FLAT_LENGTH / 2) - confidence - state.getNbMoves() / 2) + 1;
+        if (result.confidence() > 0) {
+            moves = ((GameState.FLAT_LENGTH / 2) - result.confidence() - state.getNbMoves() / 2) + 1;
             System.out.println("(Wins at worse in " + moves + " move" + (moves > 1 ? "s" : "") + ")");
-        } else if (confidence < 0) {
-            moves = (confidence - state.getNbMoves() / 2 + (GameState.FLAT_LENGTH / 2)) + 1;
+        } else if (result.confidence() < 0) {
+            moves = (result.confidence() - state.getNbMoves() / 2 + (GameState.FLAT_LENGTH / 2)) + 1;
             System.out.println("(Loses at worse in " + moves + " move" + (moves > 1 ? "s" : "") + ")");
         } else {
             System.out.println("(Draw at worse)");

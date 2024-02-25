@@ -17,7 +17,7 @@ public class FightController extends GameController {
             state = state.play(result.move());
 
             displayController.render(state);
-            displayController.updateConfidence(state, result.confidence());
+            displayController.updateConfidence(state, result);
 
             System.out.println();
 
