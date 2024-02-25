@@ -17,6 +17,15 @@ abstract public class GameController {
     public SearchResult search(GameState state) {
         SearchThread[] searchThreads = new SearchThread[GameState.GRID_WIDTH];
 
+        // On vérifie que l'IA ne peut pas gagner immédiatement
+        for (int i = 0; i < GameState.GRID_WIDTH; i++) {
+            if (state.isPlayable(i)) {
+                if (state.play(i).isWinningState()) {
+                    return new SearchResult(i, (GameState.FLAT_LENGTH + 1 - state.getNbMoves()) / 2);
+                }
+            }
+        }
+
         for (int i = 0; i < GameState.GRID_WIDTH; i++) {
             if (state.isPlayable(i)) {
                 GameState state2 = state.play(i);

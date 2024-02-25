@@ -107,6 +107,7 @@ public class SearchThread extends Thread {
             if (state.isPlayable(x)) {
                 // It's opponent turn in P2 position after current player plays x column.
                 GameState state2 = state.play(x);
+                
                 // explore opponent's score within [-beta;-alpha] windows:
                 int score = -negamax(state2, -beta, -alpha, depth + 1);
                 // no need to have good precision for score better than beta (opponent's score worse than -beta)
