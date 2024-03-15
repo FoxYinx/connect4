@@ -77,9 +77,6 @@ public class SearchThread extends Thread {
     private int negamax(GameState state, int alpha, int beta, int depth) {
         nb++;
 
-        Integer rtn = TRANSPOSITION_TABLE.get(state);
-        if (rtn != null) return rtn;
-
         // check for draw game
         if (state.isDraw()) return 0;
 
@@ -90,8 +87,19 @@ public class SearchThread extends Thread {
             }
         }
 
+        int min = -(GameState.FLAT_LENGTH - 2 - state.getNbMoves()) / 2;
+        if (alpha < min) {
+            alpha = min;
+            if (alpha >= beta) return alpha;
+        }
+
         // upper bound of our score as we cannot win immediately
         int max = (GameState.FLAT_LENGTH - 1 - state.getNbMoves()) / 2;
+        Integer rtn = TRANSPOSITION_TABLE.get(state);
+        if (rtn != null) {
+            max = rtn + GameState.MIN_SCORE - 1;
+        }
+
         if (beta > max) {
             // there is no need to keep beta above our max possible score.
             beta = max;
@@ -121,8 +129,7 @@ public class SearchThread extends Thread {
             }
         }
 
-        TRANSPOSITION_TABLE.put(state, alpha);
-
+        TRANSPOSITION_TABLE.put(state, (alpha - GameState.MIN_SCORE + 1));
         return alpha;
     }
 

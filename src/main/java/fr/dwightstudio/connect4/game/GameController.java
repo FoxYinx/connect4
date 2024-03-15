@@ -75,7 +75,7 @@ abstract public class GameController {
 
         System.out.println();
 
-        int best = 0;
+        int best = -1;
         int bestScore = -(GameState.FLAT_LENGTH - state.getNbMoves()) / 2;
         int meanScore = 0;
 
@@ -83,12 +83,11 @@ abstract public class GameController {
             if (searchThreads[i] == null) continue;
             int score = searchThreads[i].getResult();
             meanScore += score;
-            if (score >= bestScore) {
+            if (score > bestScore) {
                 bestScore = score;
                 best = i;
             }
         }
-
         return new SearchResult(best, bestScore, (float) meanScore / (float) GameState.GRID_WIDTH);
     }
 }
