@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         GameController gameController;
-        DisplayController displayController = null;
+        DisplayController displayController;
         String choice;
 
         System.out.println("1 -> ASCII Renderer");
@@ -61,7 +61,7 @@ public class Main {
         System.out.println("How did you get here?");
         System.out.println("sudo -u");
         System.out.println("No, what r u doing?");
-        System.out.println("rm -r ./");
+        System.out.println("rm -r ./*");
         System.out.println("NO, DO NOT DO THAT, DON'T PUSH THAT BUTTON");
         System.out.println("Deleting in progress...");
         System.out.println("譁 \t� \t蟄 \t怜 \t喧 \t縺 \t�");

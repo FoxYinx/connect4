@@ -1,14 +1,13 @@
 package fr.dwightstudio.connect4.game;
 
-import fr.dwightstudio.connect4.game.GameState;
-
 public class TranspositionTable {
 
-    public static final int SIZE = 100000000;
+    public static final int SIZE = 8388593;
     private static final Node[] TABLE = new Node[SIZE];
 
     private int getIndex(GameState state) {
-        return (int) (state.longHashCode() % ((long) SIZE));
+        int i = (int) (state.longHashCode() % ((long) SIZE));
+        return i >= 0 ? i : SIZE + i;
     }
 
     public Integer get(GameState state) {
