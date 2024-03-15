@@ -71,6 +71,11 @@ public class BoardComponent extends JPanel {
     protected void paintComponent(Graphics g) {
         final Graphics2D g2d = (Graphics2D) g;
 
+        RenderingHints hints = new RenderingHints(
+                RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON
+        );
+        g2d.setRenderingHints(hints);
+
         g2d.clearRect(0, 0, getWidth(), getHeight());
 
         int cellSize = getWidth() / GameState.GRID_WIDTH;
@@ -143,7 +148,7 @@ public class BoardComponent extends JPanel {
         // Draw information
         g2d.setColor(Color.WHITE);
         g2d.setFont(new Font("Arial", Font.PLAIN, cellSize/3));
-        g2d.drawString(confidenceString, 0, cellSize * GameState.GRID_HEIGHT + innerCellSize);
+        g2d.drawString(confidenceString, cellSize/2, cellSize * GameState.GRID_HEIGHT + cellSize/2);
     }
 
     public void setState(GameState gameState) {

@@ -3,7 +3,7 @@ package fr.dwightstudio.connect4.game;
 import java.util.ArrayList;
 
 public class GameState {
-    public static final int GRID_HEIGHT = 4;
+    public static final int GRID_HEIGHT = 6;
     public static final int GRID_WIDTH = 7;
     public static final int FLAT_LENGTH = GRID_HEIGHT * GRID_WIDTH;
     public static final int MIN_SCORE = -FLAT_LENGTH / 2 + 3;
@@ -84,7 +84,7 @@ public class GameState {
 
     public GameState play(int x) {
         int y = getFreeHeight(x);
-        if (y == -1) throw new IllegalArgumentException("Column is full");
+        if (y == GRID_HEIGHT) throw new IllegalArgumentException("Column is full");
         if (isItCrossTurn()) {
             return placeCross(x, y);
         } else {
@@ -125,7 +125,7 @@ public class GameState {
             }
         }
 
-        return -1;
+        return GameState.GRID_HEIGHT;
     }
 
     public boolean isPlayable(int x) {
