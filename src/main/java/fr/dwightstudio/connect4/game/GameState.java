@@ -154,6 +154,24 @@ public class GameState {
         return false;
     }
 
+    public GameState getWinningState() {
+        if (isItCrossTurn()) {
+            for (long mask : WINNING_MASKS) {
+                if ((circleGrid & mask) == mask) {
+                    return new GameState(0, mask, 0, 0);
+                }
+            }
+        } else {
+            for (long mask : WINNING_MASKS) {
+                if ((crossGrid & mask) == mask) {
+                    return new GameState(mask, 0, 0, 0);
+                }
+            }
+        }
+
+        return null;
+    }
+
     public char getWinner() {
         // Cross
         for (long mask : WINNING_MASKS) {

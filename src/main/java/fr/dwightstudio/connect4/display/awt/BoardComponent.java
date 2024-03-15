@@ -14,14 +14,16 @@ import static fr.dwightstudio.connect4.display.awt.AWTRenderer.*;
 
 public class BoardComponent extends JPanel {
 
-    private static final int ANIM_DURATION = 1000;
+    private static final int ANIM_DURATION = 350;
 
     private final PlayLock playLock;
     private GameState currentState;
+    private boolean won;
     private int lastMouseIndex;
     private char animSide;
     private long animStart;
     private Point animPos;
+    private String confidenceString;
 
     public BoardComponent() {
         super();
@@ -30,6 +32,7 @@ public class BoardComponent extends JPanel {
         animSide = ' ';
         animStart = 0;
         animPos = null;
+        confidenceString = "";
 
         this.addMouseListener(new MouseAdapter() {
             @Override
@@ -78,7 +81,7 @@ public class BoardComponent extends JPanel {
         if (animPos != null) {
             g2d.setColor(animSide == 'X' ? CROSS_COLOR : CIRCLE_COLOR);
             g2d.fillOval(cellSize * animPos.x + innerCellPadding,
-                    (int) (cellSize * (GameState.GRID_HEIGHT - animPos.y - 1) + innerCellPadding - (System.currentTimeMillis() - animStart)),
+                    cellSize * (GameState.GRID_HEIGHT - animPos.y - 1) + innerCellPadding - (int) Math.round(getHeight() * (1d - ((double) (System.currentTimeMillis() - animStart) / (double) ANIM_DURATION))),
                     innerCellSize,
                     innerCellSize);
         }
@@ -100,6 +103,27 @@ public class BoardComponent extends JPanel {
             }
         }
 
+        // Draw winning moves
+        if (won) {
+            final GameState winningState = currentState.getWinningState();
+
+            g2d.setColor(currentState.isItCrossTurn() ? CIRCLE_COLOR_WINNING : CROSS_COLOR_WINNING);
+            if (winningState != null) {
+                for (int x = 0; x < GameState.GRID_WIDTH; x++) {
+                    for (int y = 0; y < GameState.GRID_WIDTH; y++) {
+                        int i = winningState.get(x, y);
+
+                        if (i == ' ') continue;
+
+                        g2d.fillOval(cellSize * x + innerCellPadding,
+                                cellSize * (GameState.GRID_HEIGHT - y - 1) + innerCellPadding,
+                                innerCellSize,
+                                innerCellSize);
+                    }
+                }
+            }
+        }
+
         // Draw board
         Area boardSection = new Area(new Rectangle(0, 0, getWidth() / GameState.GRID_WIDTH, getHeight()));
         for (int j = 0; j < GameState.GRID_HEIGHT; j++) {
@@ -112,7 +136,14 @@ public class BoardComponent extends JPanel {
             g2d.translate(cellSize, 0);
         }
 
-        g2d.translate(cellSize - getWidth(), 0);
+        g2d.fillRect(0, 0, cellSize, getHeight());
+
+        g2d.translate(- getWidth(), 0);
+
+        // Draw information
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font("Arial", Font.PLAIN, cellSize/3));
+        g2d.drawString(confidenceString, 0, cellSize * GameState.GRID_HEIGHT + innerCellSize);
     }
 
     public void setState(GameState gameState) {
@@ -122,11 +153,6 @@ public class BoardComponent extends JPanel {
 
         while (animStart + ANIM_DURATION > System.currentTimeMillis()) {
             repaint();
-            try {
-                Thread.sleep(ANIM_DURATION - (System.currentTimeMillis() - animStart) % 60);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
         }
 
         animSide = ' ';
@@ -138,6 +164,14 @@ public class BoardComponent extends JPanel {
 
     public PlayLock getPlayLock() {
         return playLock;
+    }
+
+    public void setWon(boolean won) {
+        this.won = won;
+    }
+
+    public void setConfidenceString(String confidenceString) {
+        this.confidenceString = confidenceString;
     }
 
     public class PlayLock {

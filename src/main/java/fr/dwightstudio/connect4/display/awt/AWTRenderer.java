@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class AWTRenderer extends DisplayController {
 
@@ -21,7 +19,9 @@ public class AWTRenderer extends DisplayController {
     static final Color BACKGROUND_COLOR = new Color(23, 112, 255);
     static final Color SELECTED_BACKGROUND_COLOR = new Color(79, 147, 255);
     static final Color CROSS_COLOR = new Color(255, 224, 51);
+    static final Color CROSS_COLOR_WINNING = new Color(95, 255, 51);
     static final Color CIRCLE_COLOR = new Color(255, 79, 48);
+    static final Color CIRCLE_COLOR_WINNING = new Color(65, 255, 211);
 
     private final JFrame frame;
     private final BoardComponent boardComponent;
@@ -51,13 +51,13 @@ public class AWTRenderer extends DisplayController {
 
     private Rectangle getBoardBounds() {
         int candidateWidth = frame.getWidth();
-        int candidateHeight = (int) Math.floor(((double) candidateWidth / (double) GameState.GRID_WIDTH) * GameState.GRID_HEIGHT);
+        int candidateHeight = (int) Math.floor(((double) candidateWidth / (double) GameState.GRID_WIDTH) * (GameState.GRID_HEIGHT + 1));
 
         if (candidateHeight <= frame.getHeight()) {
             return new Rectangle(0, (frame.getHeight() - candidateHeight) / 2, candidateWidth, candidateHeight);
         } else {
             candidateHeight = frame.getHeight();
-            candidateWidth = (int) Math.floor(((double) candidateHeight / (double) GameState.GRID_HEIGHT) * GameState.GRID_WIDTH);
+            candidateWidth = (int) Math.floor(((double) candidateHeight / (double) (GameState.GRID_HEIGHT + 1)) * GameState.GRID_WIDTH);
 
             return new Rectangle((frame.getWidth() - candidateWidth) / 2, 0, candidateWidth, candidateHeight);
         }
@@ -85,7 +85,7 @@ public class AWTRenderer extends DisplayController {
 
     @Override
     public void win(boolean human) {
-
+        boardComponent.setWon(true);
     }
 
     @Override
@@ -95,11 +95,26 @@ public class AWTRenderer extends DisplayController {
 
     @Override
     public void updateConfidence(GameState state, SearchResult result) {
+        StringBuilder confidenceString = new StringBuilder();
+        confidenceString.append("Confidence: ").append(result.confidence()).append(" ");
 
+        int moves;
+        if (result.confidence() > 0) {
+            moves = ((GameState.FLAT_LENGTH / 2) - result.confidence() - state.getNbMoves() / 2) + 1;
+            confidenceString.append("(Wins at worse in ").append(moves).append(" move").append(moves > 1 ? "s" : "").append(")");
+        } else if (result.confidence() < 0) {
+            moves = (result.confidence() - state.getNbMoves() / 2 + (GameState.FLAT_LENGTH / 2)) + 1;
+            confidenceString.append("(Loses at worse in ").append(moves).append(" move").append(moves > 1 ? "s" : "").append(")");
+        } else {
+            confidenceString.append("(Draw at worse)");
+        }
+
+        boardComponent.setConfidenceString(confidenceString.toString());
     }
 
     @Override
     public void clear() {
+        boardComponent.setWon(false);
         render(null);
     }
 }
