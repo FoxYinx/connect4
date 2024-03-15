@@ -186,7 +186,11 @@ public class GameState {
     }
 
     public long longHashCode() {
-        return this.circleGrid + (this.crossGrid | this.circleGrid);
+        if (isItCrossTurn()) {
+            return this.circleGrid + (this.crossGrid | this.circleGrid);
+        } else {
+            return this.crossGrid + (this.crossGrid | this.circleGrid);
+        }
     }
 
     @Override
