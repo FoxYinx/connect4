@@ -21,13 +21,13 @@ public class FightController extends GameController {
 
             System.out.println();
 
-            if (state.isDraw()) {
-                displayController.draw();
+            if (state.isWinningState()) {
+                displayController.win(false);
                 return;
             }
 
-            if (state.isWinningState()) {
-                displayController.win(false);
+            if (state.isDraw()) {
+                displayController.draw();
                 return;
             }
         }

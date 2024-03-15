@@ -2,7 +2,7 @@ package fr.dwightstudio.connect4;
 
 import fr.dwightstudio.connect4.display.DisplayController;
 import fr.dwightstudio.connect4.display.console.ASCIIRenderer;
-import fr.dwightstudio.connect4.display.java2d.Java2DRenderer;
+import fr.dwightstudio.connect4.display.awt.AWTRenderer;
 import fr.dwightstudio.connect4.game.FightController;
 import fr.dwightstudio.connect4.game.GameController;
 import fr.dwightstudio.connect4.game.GameState;
@@ -27,7 +27,7 @@ public class Main {
         if (choice.equals("1")) {
             displayController = new ASCIIRenderer();
         } else if (choice.equals("2")) {
-            displayController = new Java2DRenderer();
+            displayController = new AWTRenderer();
         } else {
             throw new RuntimeException("Make a valid choice dummy (1 or 2)");
         }

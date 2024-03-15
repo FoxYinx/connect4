@@ -17,13 +17,13 @@ public class CaptchaController extends GameController {
             displayController.render(state);
 
             // On vérifie que la partie ne soit pas terminée
-            if (state.isDraw()) {
-                displayController.draw();
+            if (state.isWinningState()) {
+                displayController.win(true);
                 return;
             }
 
-            if (state.isWinningState()) {
-                displayController.win(true);
+            if (state.isDraw()) {
+                displayController.draw();
                 return;
             }
 
@@ -34,13 +34,13 @@ public class CaptchaController extends GameController {
             displayController.render(state);
             displayController.updateConfidence(state, result);
 
-            if (state.isDraw()) {
-                displayController.draw();
+            if (state.isWinningState()) {
+                displayController.win(false);
                 return;
             }
 
-            if (state.isWinningState()) {
-                displayController.win(false);
+            if (state.isDraw()) {
+                displayController.draw();
                 return;
             }
         }
