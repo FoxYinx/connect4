@@ -88,7 +88,14 @@ abstract public class GameController {
                 best = i;
             }
         }
-        if (best == -1) throw new RuntimeException("No best move found");
+        if (best == -1) {
+            for (int i = 0; i < GameState.GRID_WIDTH; i++) {
+                if (state.isPlayable(SearchThread.COLUMN_ORDER[i])) {
+                    best = i;
+                    break;
+                }
+            }
+        }
         return new SearchResult(best, bestScore, (float) meanScore / (float) GameState.GRID_WIDTH);
     }
 }
