@@ -80,6 +80,11 @@ public class SearchThread extends Thread {
         // check for draw game
         if (state.isDraw()) return 0;
 
+        long next = state.possibleNonLosingMoves();
+
+        // if no possible non-losing move, opponent wins next move
+        if (next == 0) return -(GameState.FLAT_LENGTH- state.getNbMoves()) / 2;
+
         // check if current player can win next move
         for (int x = 0; x < GameState.GRID_WIDTH; x++) {
             if (state.isPlayable(x) && (state.play(x).isWinningState())) {
@@ -104,27 +109,55 @@ public class SearchThread extends Thread {
         // upper bound of our score as we cannot win immediately
         Integer val = TRANSPOSITION_TABLE.get(state);
 
-        if(val != null) {
-            if(val > GameState.MAX_SCORE - GameState.MIN_SCORE + 1) {
+        if (val != null) {
+            if (val > GameState.MAX_SCORE - GameState.MIN_SCORE + 1) {
                 // we have a lower bound
-                min = val + 2*GameState.MIN_SCORE - GameState.MAX_SCORE - 2;
-                if(alpha < min) {
+                min = val + 2 * GameState.MIN_SCORE - GameState.MAX_SCORE - 2;
+                if (alpha < min) {
                     // there is no need to keep beta above our max possible score.
                     alpha = min;
                     // prune the exploration if the [alpha;beta] window is empty.
-                    if(alpha >= beta) return alpha;
+                    if (alpha >= beta) return alpha;
                 }
-            }
-            else {
+            } else {
                 // we have an upper bound
                 max = val + GameState.MIN_SCORE - 1;
-                if(beta > max) {
+                if (beta > max) {
                     // there is no need to keep beta above our max possible score.
                     beta = max;
                     // prune the exploration if the [alpha;beta] window is empty.
-                    if(alpha >= beta) return beta;
+                    if (alpha >= beta) return beta;
                 }
             }
+        }
+
+        MoveSorter moves = new MoveSorter();
+
+        for (int i = GameState.GRID_WIDTH; i > 0; i--) {
+            long move;
+            if (move = (next & GameState.column_mask(COLUMN_ORDER[i]))) {
+                moves.add(move, state.moveScore(move));
+            }
+        }
+
+        while ((next = moves.getNext()) > 0) {
+            GameState state2 = state.play(x);
+
+            // explore opponent's score within [-beta;-alpha] windows:
+            int score = -negamax(state2, -beta, -alpha, depth + 1);
+            // no need to have good precision for score better than beta (opponent's score worse than -beta)
+            // no need to check for score worse than alpha (opponent's score worse better than -alpha)
+
+            // prune the exploration if we find a possible move better than what we were looking for.
+            if (score >= beta) {
+                // save the lower bound of the position
+                TRANSPOSITION_TABLE.put(state, score + GameState.MAX_SCORE - 2 * GameState.MIN_SCORE + 2);
+                return score;
+            }
+
+            // reduce the [alpha;beta] window for next exploration, as we only
+            // need to search for a position that is better than the best so far.
+            if (score > alpha) alpha = score;
         }
 
         for (int i = 0; i < GameState.GRID_WIDTH; i++) {

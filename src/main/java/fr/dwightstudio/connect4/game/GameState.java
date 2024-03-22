@@ -376,6 +376,18 @@ public class GameState {
         return x + y * GameState.GRID_WIDTH;
     }
 
+    public int moveScore(long move) {
+        if (isItCrossTurn()) {
+            return Long.bitCount(computeWinningPositions(crossGrid | move, circleGrid));
+        } else {
+            return Long.bitCount(computeWinningPositions(circleGrid | move, crossGrid));
+        }
+    }
+
+    public static long column_mask(int col) {
+        return ((1L << GameState.GRID_HEIGHT) - 1) << col * (GRID_HEIGHT + 1);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof GameState state) {
