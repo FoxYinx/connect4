@@ -184,6 +184,20 @@ public class GameState {
         WINNING_EMPTY_POSITION_MASK = empty_rtn.toArray(new Long[0]);
     }
 
+    public static final Long[] COLUMN_MASK;
+
+    static {
+        COLUMN_MASK = new Long[GRID_WIDTH];
+
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            long mask = 0L;
+            for (int y = 0; y < GRID_HEIGHT; y++) {
+                mask |= 1L << getFlatIndex(x, y);
+            }
+            COLUMN_MASK[x] = mask;
+        }
+    }
+
     private final long crossGrid;
     private final long circleGrid;
     private final int nbMoves;
@@ -217,10 +231,8 @@ public class GameState {
 
     public GameState playMask(long mask) {
         for (int x = 0; x < GRID_WIDTH; x++) {
-            for (int y = 0; y < GRID_HEIGHT; y++) {
-                if (((mask >>> getFlatIndex(x, y)) & 1) == 1) {
-                    return play(x);
-                }
+            if ((mask & COLUMN_MASK[x]) != 0) {
+                return play(x);
             }
         }
 
@@ -382,10 +394,6 @@ public class GameState {
         } else {
             return Long.bitCount(computeWinningPositions(circleGrid | move, crossGrid));
         }
-    }
-
-    public static long column_mask(int col) {
-        return ((1L << GameState.GRID_HEIGHT) - 1) << col * (GRID_HEIGHT + 1);
     }
 
     @Override
