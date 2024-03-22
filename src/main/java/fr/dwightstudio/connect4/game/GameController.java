@@ -88,6 +88,7 @@ abstract public class GameController {
                 best = i;
             }
         }
+        if (best == -1) throw new RuntimeException("No best move found");
         return new SearchResult(best, bestScore, (float) meanScore / (float) GameState.GRID_WIDTH);
     }
 }
