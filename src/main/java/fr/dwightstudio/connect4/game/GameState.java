@@ -68,115 +68,61 @@ public class GameState {
         ArrayList<Long> filled_rtn = new ArrayList<>();
         ArrayList<Long> empty_rtn = new ArrayList<>();
 
-        // Horizontale + Droite
-        for (int x = 0; x < GRID_WIDTH - 3; x++) {
-            for (int y = 0; y < GRID_HEIGHT; y++) {
-                long filled_mask = 0L;
-                long empty_mask = 0L;
-                for (int d = 0; d < 4; d++) {
-                    if (d < 3) filled_mask |= (1L << getFlatIndex(x + d, y));
-                    else empty_mask |= (1L << getFlatIndex(x + d, y));
+        for (int w = 0; w < 4; w++) {
+            // Horizontale
+            for (int x = 0; x < GRID_WIDTH - 3; x++) {
+                for (int y = 0; y < GRID_HEIGHT; y++) {
+                    long filled_mask = 0L;
+                    long empty_mask = 0L;
+                    for (int d = 0; d < 4; d++) {
+                        if (d != w) filled_mask |= (1L << getFlatIndex(x + d, y));
+                        else empty_mask |= (1L << getFlatIndex(x + d, y));
+                    }
+                    filled_rtn.add(filled_mask);
+                    empty_rtn.add(empty_mask);
                 }
-                filled_rtn.add(filled_mask);
-                empty_rtn.add(empty_mask);
             }
-        }
 
-        // Horizontale + Gauche
-        for (int x = 0; x < GRID_WIDTH - 3; x++) {
-            for (int y = 0; y < GRID_HEIGHT; y++) {
-                long filled_mask = 0L;
-                long empty_mask = 0L;
-                for (int d = 0; d < 4; d++) {
-                    if (d > 0) filled_mask |= (1L << getFlatIndex(x + d, y));
-                    else empty_mask |= (1L << getFlatIndex(x + d, y));
+            // Verticale
+            for (int x = 0; x < GRID_WIDTH; x++) {
+                for (int y = 0; y < GRID_HEIGHT - 3; y++) {
+                    long filled_mask = 0L;
+                    long empty_mask = 0L;
+                    for (int d = 0; d < 4; d++) {
+                        if (d != w) filled_mask |= (1L << getFlatIndex(x, y + d));
+                        else empty_mask |= (1L << getFlatIndex(x, y + d));
+                    }
+                    filled_rtn.add(filled_mask);
+                    empty_rtn.add(empty_mask);
                 }
-                filled_rtn.add(filled_mask);
-                empty_rtn.add(empty_mask);
             }
-        }
 
-        // Verticale + Droite
-        for (int x = 0; x < GRID_WIDTH; x++) {
-            for (int y = 0; y < GRID_HEIGHT - 3; y++) {
-                long filled_mask = 0L;
-                long empty_mask = 0L;
-                for (int d = 0; d < 4; d++) {
-                    if (d < 3) filled_mask |= (1L << getFlatIndex(x, y + d));
-                    else empty_mask |= (1L << getFlatIndex(x, y + d));
+            // Diagonale vers le haut
+            for (int x = 0; x < GRID_WIDTH - 3; x++) {
+                for (int y = 0; y < GRID_HEIGHT - 3; y++) {
+                    long filled_mask = 0L;
+                    long empty_mask = 0L;
+                    for (int d = 0; d < 4; d++) {
+                        if (d != w) filled_mask |= (1L << getFlatIndex(x + d, y + d));
+                        else empty_mask |= (1L << getFlatIndex(x, y + d));
+                    }
+                    filled_rtn.add(filled_mask);
+                    empty_rtn.add(empty_mask);
                 }
-                filled_rtn.add(filled_mask);
-                empty_rtn.add(empty_mask);
             }
-        }
 
-        // Verticale + Gauche
-        for (int x = 0; x < GRID_WIDTH; x++) {
-            for (int y = 0; y < GRID_HEIGHT - 3; y++) {
-                long filled_mask = 0L;
-                long empty_mask = 0L;
-                for (int d = 0; d < 4; d++) {
-                    if (d > 0) filled_mask |= (1L << getFlatIndex(x, y + d));
-                    else empty_mask |= (1L << getFlatIndex(x, y + d));
+            // Diagonale le bas
+            for (int x = 0; x < GRID_WIDTH - 3; x++) {
+                for (int y = 3; y < GRID_HEIGHT; y++) {
+                    long filled_mask = 0L;
+                    long empty_mask = 0L;
+                    for (int d = 0; d < 4; d++) {
+                        if (d != w) filled_mask |= (1L << getFlatIndex(x + d, y - d));
+                        else empty_mask |= (1L << getFlatIndex(x, y + d));
+                    }
+                    filled_rtn.add(filled_mask);
+                    empty_rtn.add(empty_mask);
                 }
-                filled_rtn.add(filled_mask);
-                empty_rtn.add(empty_mask);
-            }
-        }
-
-        // Diagonale vers le haut + Droite
-        for (int x = 0; x < GRID_WIDTH - 3; x++) {
-            for (int y = 0; y < GRID_HEIGHT - 3; y++) {
-                long filled_mask = 0L;
-                long empty_mask = 0L;
-                for (int d = 0; d < 4; d++) {
-                    if (d < 3) filled_mask |= (1L << getFlatIndex(x + d, y + d));
-                    else empty_mask |= (1L << getFlatIndex(x, y + d));
-                }
-                filled_rtn.add(filled_mask);
-                empty_rtn.add(empty_mask);
-            }
-        }
-
-        // Diagonale vers le haut + Gauche
-        for (int x = 0; x < GRID_WIDTH - 3; x++) {
-            for (int y = 0; y < GRID_HEIGHT - 3; y++) {
-                long filled_mask = 0L;
-                long empty_mask = 0L;
-                for (int d = 0; d < 4; d++) {
-                    if (d > 0) filled_mask |= (1L << getFlatIndex(x + d, y + d));
-                    else empty_mask |= (1L << getFlatIndex(x, y + d));
-                }
-                filled_rtn.add(filled_mask);
-                empty_rtn.add(empty_mask);
-            }
-        }
-
-        // Diagonale le bas + Droite
-        for (int x = 0; x < GRID_WIDTH - 3; x++) {
-            for (int y = 3; y < GRID_HEIGHT; y++) {
-                long filled_mask = 0L;
-                long empty_mask = 0L;
-                for (int d = 0; d < 4; d++) {
-                    if (d < 3) filled_mask |= (1L << getFlatIndex(x + d, y - d));
-                    else empty_mask |= (1L << getFlatIndex(x, y + d));
-                }
-                filled_rtn.add(filled_mask);
-                empty_rtn.add(empty_mask);
-            }
-        }
-
-        // Diagonale le bas + Gauche
-        for (int x = 0; x < GRID_WIDTH - 3; x++) {
-            for (int y = 3; y < GRID_HEIGHT; y++) {
-                long filled_mask = 0L;
-                long empty_mask = 0L;
-                for (int d = 0; d < 4; d++) {
-                    if (d > 0) filled_mask |= (1L << getFlatIndex(x + d, y - d));
-                    else empty_mask |= (1L << getFlatIndex(x, y + d));
-                }
-                filled_rtn.add(filled_mask);
-                empty_rtn.add(empty_mask);
             }
         }
 
