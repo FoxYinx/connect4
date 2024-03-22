@@ -235,7 +235,7 @@ public class GameState {
             else possibleMask = forcedMoves;
         }
 
-        return possibleMask & ~(opponentWinningPos >> GameState.GRID_WIDTH);
+        return possibleMask & ~(opponentWinningPos >> getFlatIndex(0, 1));
     }
 
     public long computePossibleMoves() {
