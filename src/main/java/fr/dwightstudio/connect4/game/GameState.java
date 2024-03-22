@@ -234,7 +234,7 @@ public class GameState {
             else possibleMask = forcedMoves;
         }
 
-        return possibleMask & ~(opponentWinningPos >> getFlatIndex(0, 1));
+        return possibleMask & ~(opponentWinningPos >>> getFlatIndex(0, 1));
     }
 
     public long computePossibleMoves() {

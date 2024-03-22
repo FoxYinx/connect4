@@ -134,8 +134,8 @@ public class SearchThread extends Thread {
         MoveSorter moves = new MoveSorter();
 
         for (int i = GameState.GRID_WIDTH - 1; i >= 0; i--) {
-            long move;
-            if ((move = next & GameState.COLUMN_MASK[COLUMN_ORDER[i]]) != 0) {
+            long move = next & GameState.COLUMN_MASK[COLUMN_ORDER[i]];
+            if (move != 0) {
                 moves.add(move, state.moveScore(move));
             }
         }
