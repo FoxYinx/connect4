@@ -131,34 +131,26 @@ public class SearchThread extends Thread {
             }
         }
 
-        MoveSorter moves = new MoveSorter();
+        for (int i = 0; i < GameState.GRID_WIDTH; i++) {
+            if ((next & GameState.COLUMN_MASK[COLUMN_ORDER[i]]) != 0) {
+                GameState state2 = state.play(COLUMN_ORDER[i]);
 
-        for (int i = GameState.GRID_WIDTH - 1; i >= 0; i--) {
-            long move = next & GameState.COLUMN_MASK[COLUMN_ORDER[i]];
-            if (move != 0) {
-                moves.add(move, state.moveScore(move));
+                // explore opponent's score within [-beta;-alpha] windows:
+                int score = -negamax(state2, -beta, -alpha, depth + 1);
+                // no need to have good precision for score better than beta (opponent's score worse than -beta)
+                // no need to check for score worse than alpha (opponent's score worse better than -alpha)
+
+                // prune the exploration if we find a possible move better than what we were looking for.
+                if (score >= beta) {
+                    // save the lower bound of the position
+                    TRANSPOSITION_TABLE.put(state, score + GameState.MAX_SCORE - 2 * GameState.MIN_SCORE + 2);
+                    return score;
+                }
+
+                // reduce the [alpha;beta] window for next exploration, as we only
+                // need to search for a position that is better than the best so far.
+                if (score > alpha) alpha = score;
             }
-        }
-
-        long nextMove;
-        while ((nextMove = moves.getNext()) != 0) {
-            GameState state2 = state.playMask(nextMove);
-
-            // explore opponent's score within [-beta;-alpha] windows:
-            int score = -negamax(state2, -beta, -alpha, depth + 1);
-            // no need to have good precision for score better than beta (opponent's score worse than -beta)
-            // no need to check for score worse than alpha (opponent's score worse better than -alpha)
-
-            // prune the exploration if we find a possible move better than what we were looking for.
-            if (score >= beta) {
-                // save the lower bound of the position
-                TRANSPOSITION_TABLE.put(state, score + GameState.MAX_SCORE - 2 * GameState.MIN_SCORE + 2);
-                return score;
-            }
-
-            // reduce the [alpha;beta] window for next exploration, as we only
-            // need to search for a position that is better than the best so far.
-            if (score > alpha) alpha = score;
         }
 
         TRANSPOSITION_TABLE.put(state, alpha - GameState.MIN_SCORE + 1);
