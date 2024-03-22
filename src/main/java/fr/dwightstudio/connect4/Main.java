@@ -41,7 +41,9 @@ public class Main {
             System.out.println();
             System.out.println("1 -> Captcha (Human/AI)");
             System.out.println("2 -> Fight (AI/AI)");
-            System.out.println("3 -> Test");
+            System.out.println("3 -> PVP (Human/Human)");
+            System.out.println("4 -> Board Creator");
+            System.out.println("5 -> Test");
             System.out.println();
             System.out.println("Versus or Against itself?");
             System.out.print("> ");
@@ -54,7 +56,11 @@ public class Main {
         } else if (choice.equals("2")) {
             gameController = new FightController(displayController);
         } else if (choice.equals("3")) {
-            gameController = new TestController(displayController);
+                gameController = new PVPController(displayController);
+        } else if (choice.equals("4")) {
+            gameController = new BoardCreatorController(displayController);
+        } else if (choice.equals("5")) {
+                gameController = new TestController(displayController);
         } else if (choice.equalsIgnoreCase("learn")) {
             crippy();
             return;

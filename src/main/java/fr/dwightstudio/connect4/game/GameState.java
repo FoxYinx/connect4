@@ -157,7 +157,7 @@ public class GameState {
     }
 
     public GameState() {
-        this(0, 0, 0, -1);
+        this(0,0, 0, -1);
     }
 
     public boolean isItCrossTurn() {

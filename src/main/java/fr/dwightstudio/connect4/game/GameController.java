@@ -88,10 +88,11 @@ abstract public class GameController {
                 best = i;
             }
         }
+
         if (best == -1) {
             for (int i = 0; i < GameState.GRID_WIDTH; i++) {
                 if (state.isPlayable(SearchThread.COLUMN_ORDER[i])) {
-                    best = i;
+                    best = SearchThread.COLUMN_ORDER[i];
                     break;
                 }
             }
