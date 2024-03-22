@@ -58,7 +58,130 @@ public class GameState {
             }
         }
 
-        WINNING_MASKS = rtn.toArray(rtn.toArray(new Long[0]));
+        WINNING_MASKS = rtn.toArray(new Long[0]);
+    }
+
+    public static final Long[] WINNING_FILLED_POSITION_MASK;
+    public static final Long[] WINNING_EMPTY_POSITION_MASK;
+
+    static {
+        ArrayList<Long> filled_rtn = new ArrayList<>();
+        ArrayList<Long> empty_rtn = new ArrayList<>();
+
+        // Horizontale + Droite
+        for (int x = 0; x < GRID_WIDTH - 3; x++) {
+            for (int y = 0; y < GRID_HEIGHT; y++) {
+                long filled_mask = 0L;
+                long empty_mask = 0L;
+                for (int d = 0; d < 4; d++) {
+                    if (d < 3) filled_mask |= (1L << getFlatIndex(x + d, y));
+                    else empty_mask |= (1L << getFlatIndex(x + d, y));
+                }
+                filled_rtn.add(filled_mask);
+                empty_rtn.add(empty_mask);
+            }
+        }
+
+        // Horizontale + Gauche
+        for (int x = 0; x < GRID_WIDTH - 3; x++) {
+            for (int y = 0; y < GRID_HEIGHT; y++) {
+                long filled_mask = 0L;
+                long empty_mask = 0L;
+                for (int d = 0; d < 4; d++) {
+                    if (d > 0) filled_mask |= (1L << getFlatIndex(x + d, y));
+                    else empty_mask |= (1L << getFlatIndex(x + d, y));
+                }
+                filled_rtn.add(filled_mask);
+                empty_rtn.add(empty_mask);
+            }
+        }
+
+        // Verticale + Droite
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            for (int y = 0; y < GRID_HEIGHT - 3; y++) {
+                long filled_mask = 0L;
+                long empty_mask = 0L;
+                for (int d = 0; d < 4; d++) {
+                    if (d < 3) filled_mask |= (1L << getFlatIndex(x, y + d));
+                    else empty_mask |= (1L << getFlatIndex(x, y + d));
+                }
+                filled_rtn.add(filled_mask);
+                empty_rtn.add(empty_mask);
+            }
+        }
+
+        // Verticale + Gauche
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            for (int y = 0; y < GRID_HEIGHT - 3; y++) {
+                long filled_mask = 0L;
+                long empty_mask = 0L;
+                for (int d = 0; d < 4; d++) {
+                    if (d > 0) filled_mask |= (1L << getFlatIndex(x, y + d));
+                    else empty_mask |= (1L << getFlatIndex(x, y + d));
+                }
+                filled_rtn.add(filled_mask);
+                empty_rtn.add(empty_mask);
+            }
+        }
+
+        // Diagonale vers le haut + Droite
+        for (int x = 0; x < GRID_WIDTH - 3; x++) {
+            for (int y = 0; y < GRID_HEIGHT - 3; y++) {
+                long filled_mask = 0L;
+                long empty_mask = 0L;
+                for (int d = 0; d < 4; d++) {
+                    if (d < 3) filled_mask |= (1L << getFlatIndex(x + d, y + d));
+                    else empty_mask |= (1L << getFlatIndex(x, y + d));
+                }
+                filled_rtn.add(filled_mask);
+                empty_rtn.add(empty_mask);
+            }
+        }
+
+        // Diagonale vers le haut + Gauche
+        for (int x = 0; x < GRID_WIDTH - 3; x++) {
+            for (int y = 0; y < GRID_HEIGHT - 3; y++) {
+                long filled_mask = 0L;
+                long empty_mask = 0L;
+                for (int d = 0; d < 4; d++) {
+                    if (d > 0) filled_mask |= (1L << getFlatIndex(x + d, y + d));
+                    else empty_mask |= (1L << getFlatIndex(x, y + d));
+                }
+                filled_rtn.add(filled_mask);
+                empty_rtn.add(empty_mask);
+            }
+        }
+
+        // Diagonale le bas + Droite
+        for (int x = 0; x < GRID_WIDTH - 3; x++) {
+            for (int y = 3; y < GRID_HEIGHT; y++) {
+                long filled_mask = 0L;
+                long empty_mask = 0L;
+                for (int d = 0; d < 4; d++) {
+                    if (d < 3) filled_mask |= (1L << getFlatIndex(x + d, y - d));
+                    else empty_mask |= (1L << getFlatIndex(x, y + d));
+                }
+                filled_rtn.add(filled_mask);
+                empty_rtn.add(empty_mask);
+            }
+        }
+
+        // Diagonale le bas + Gauche
+        for (int x = 0; x < GRID_WIDTH - 3; x++) {
+            for (int y = 3; y < GRID_HEIGHT; y++) {
+                long filled_mask = 0L;
+                long empty_mask = 0L;
+                for (int d = 0; d < 4; d++) {
+                    if (d > 0) filled_mask |= (1L << getFlatIndex(x + d, y - d));
+                    else empty_mask |= (1L << getFlatIndex(x, y + d));
+                }
+                filled_rtn.add(filled_mask);
+                empty_rtn.add(empty_mask);
+            }
+        }
+
+        WINNING_FILLED_POSITION_MASK = filled_rtn.toArray(new Long[0]);
+        WINNING_EMPTY_POSITION_MASK = empty_rtn.toArray(new Long[0]);
     }
 
     private final long crossGrid;
@@ -90,6 +213,18 @@ public class GameState {
         } else {
             return placeCircle(x, y);
         }
+    }
+
+    public GameState playMask(long mask) {
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            for (int y = 0; y < GRID_HEIGHT; y++) {
+                if (((mask >>> getFlatIndex(x, y)) & 1) == 1) {
+                    return play(x);
+                }
+            }
+        }
+
+        throw new IllegalArgumentException("Empty mask");
     }
 
     public GameState placeCross(int x, int y) {
@@ -132,22 +267,65 @@ public class GameState {
         return get(x, GRID_HEIGHT-1) == ' ';
     }
 
+    public long possibleNonLosingMoves() {
+        long possibleMask = computePossibleMoves();
+        long opponentWinningPos = computeOpponentWinningPositions();
+        long forcedMoves = possibleMask & opponentWinningPos;
+
+        if (forcedMoves != 0) {
+            if ((forcedMoves & (forcedMoves - 1)) != 0) return 0;
+            else possibleMask = forcedMoves;
+        }
+
+        return possibleMask & ~(opponentWinningPos >> GameState.GRID_WIDTH);
+    }
+
+    public long computePossibleMoves() {
+        long grid = crossGrid | circleGrid;
+        long mask = 0L;
+
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            for (int y = 0; y < GRID_HEIGHT; y++) {
+                if (((grid >>> getFlatIndex(x, y)) & 1L) == 0) {
+                    mask |= (1L << getFlatIndex(x, y));
+                    break;
+                }
+            }
+        }
+
+        return mask;
+    }
+
+    public long computeOpponentWinningPositions() {
+        if (isItCrossTurn()) {
+            return computeWinningPositions(circleGrid, crossGrid);
+        } else {
+            return computeWinningPositions(crossGrid, circleGrid);
+        }
+    }
+
+    public long computeWinningPositions(long playerMask, long opponentMask) {
+        long mask = 0L;
+
+        for (int i = 0; i < WINNING_FILLED_POSITION_MASK.length; i++) {
+            if ((playerMask & WINNING_FILLED_POSITION_MASK[i]) == WINNING_FILLED_POSITION_MASK[i]) {
+                mask |= ~(playerMask | opponentMask) & WINNING_EMPTY_POSITION_MASK[i];
+            }
+        }
+
+        return mask;
+    }
+
     public boolean isDraw() {
         return nbMoves == FLAT_LENGTH;
     }
 
     public boolean isWinningState() {
-        if (isItCrossTurn()) {
-            for (long mask : WINNING_MASKS) {
-                if ((circleGrid & mask) == mask) {
-                    return true;
-                }
-            }
-        } else {
-            for (long mask : WINNING_MASKS) {
-                if ((crossGrid & mask) == mask) {
-                    return true;
-                }
+        long playerMask = isItCrossTurn() ? circleGrid : crossGrid;
+
+        for (long mask : WINNING_MASKS) {
+            if ((playerMask & mask) == mask) {
+                return true;
             }
         }
 
