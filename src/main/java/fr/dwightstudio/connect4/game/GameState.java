@@ -104,7 +104,7 @@ public class GameState {
                     long empty_mask = 0L;
                     for (int d = 0; d < 4; d++) {
                         if (d != w) filled_mask |= (1L << getFlatIndex(x + d, y + d));
-                        else empty_mask |= (1L << getFlatIndex(x, y + d));
+                        else empty_mask |= (1L << getFlatIndex(x + d, y + d));
                     }
                     filled_rtn.add(filled_mask);
                     empty_rtn.add(empty_mask);
@@ -118,7 +118,7 @@ public class GameState {
                     long empty_mask = 0L;
                     for (int d = 0; d < 4; d++) {
                         if (d != w) filled_mask |= (1L << getFlatIndex(x + d, y - d));
-                        else empty_mask |= (1L << getFlatIndex(x, y + d));
+                        else empty_mask |= (1L << getFlatIndex(x + d, y - d));
                     }
                     filled_rtn.add(filled_mask);
                     empty_rtn.add(empty_mask);
@@ -149,7 +149,7 @@ public class GameState {
     private final int nbMoves;
     private final int lastMove;
 
-    private GameState(long crossGrid, long circleGrid, int nbMoves, int lastMove) {
+    public GameState(long crossGrid, long circleGrid, int nbMoves, int lastMove) {
         this.crossGrid = crossGrid;
         this.circleGrid = circleGrid;
         this.nbMoves = nbMoves;
@@ -157,7 +157,6 @@ public class GameState {
     }
 
     public GameState() {
-        //this(5461,10922, 0, -1);
         this(0, 0, 0, -1);
     }
 

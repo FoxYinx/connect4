@@ -3,10 +3,7 @@ package fr.dwightstudio.connect4;
 import fr.dwightstudio.connect4.display.DisplayController;
 import fr.dwightstudio.connect4.display.console.ASCIIRenderer;
 import fr.dwightstudio.connect4.display.awt.AWTRenderer;
-import fr.dwightstudio.connect4.game.FightController;
-import fr.dwightstudio.connect4.game.GameController;
-import fr.dwightstudio.connect4.game.GameState;
-import fr.dwightstudio.connect4.game.CaptchaController;
+import fr.dwightstudio.connect4.game.*;
 
 import java.util.Scanner;
 
@@ -44,6 +41,7 @@ public class Main {
             System.out.println();
             System.out.println("1 -> Captcha (Human/AI)");
             System.out.println("2 -> Fight (AI/AI)");
+            System.out.println("3 -> Test");
             System.out.println();
             System.out.println("Versus or Against itself?");
             System.out.print("> ");
@@ -55,6 +53,8 @@ public class Main {
             gameController = new CaptchaController(displayController);
         } else if (choice.equals("2")) {
             gameController = new FightController(displayController);
+        } else if (choice.equals("3")) {
+            gameController = new TestController(displayController);
         } else if (choice.equalsIgnoreCase("learn")) {
             crippy();
             return;
