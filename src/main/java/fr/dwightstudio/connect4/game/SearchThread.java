@@ -83,7 +83,7 @@ public class SearchThread extends Thread {
         long next = state.possibleNonLosingMoves();
 
         // if no possible non-losing move, opponent wins next move
-        if (next == 0) return -(GameState.FLAT_LENGTH- state.getNbMoves()) / 2;
+        if (next == 0) return -(GameState.FLAT_LENGTH - state.getNbMoves()) / 2;
 
         // check if current player can win next move
         for (int x = 0; x < GameState.GRID_WIDTH; x++) {
@@ -135,13 +135,13 @@ public class SearchThread extends Thread {
 
         for (int i = GameState.GRID_WIDTH - 1; i >= 0; i--) {
             long move;
-            if ((move = next & GameState.COLUMN_MASK[COLUMN_ORDER[i]]) > 0) {
+            if ((move = next & GameState.COLUMN_MASK[COLUMN_ORDER[i]]) != 0) {
                 moves.add(move, state.moveScore(move));
             }
         }
 
         long nextMove;
-        while ((nextMove = moves.getNext()) > 0) {
+        while ((nextMove = moves.getNext()) != 0) {
             GameState state2 = state.playMask(nextMove);
 
             // explore opponent's score within [-beta;-alpha] windows:

@@ -15,7 +15,7 @@ public class MoveSorter {
 
     public void add(long move, int score) {
         int pos = size++;
-        for (; pos > 0 && entries[pos-1].getScore() > score; --pos) {
+        for (; pos != 0 && entries[pos-1].getScore() > score; --pos) {
             entries[pos] = entries[pos-1];
         }
         entries[pos].setMove(move);
