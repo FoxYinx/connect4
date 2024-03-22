@@ -8,6 +8,9 @@ public class MoveSorter {
     public MoveSorter() {
         this.size = 0;
         this.entries = new MoveScore[GameState.GRID_WIDTH];
+        for (int i = 0; i < GameState.GRID_WIDTH; i++) {
+            entries[i] = new MoveScore(0, 0);
+        }
     }
 
     public void add(long move, int score) {
@@ -31,7 +34,7 @@ public class MoveSorter {
         this.size = 0;
     }
 
-    private class MoveScore {
+    private static class MoveScore {
         private long move;
         private int score;
 

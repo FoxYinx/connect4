@@ -3,7 +3,7 @@ package fr.dwightstudio.connect4.game;
 import java.util.ArrayList;
 
 public class GameState {
-    public static final int GRID_HEIGHT = 6;
+    public static final int GRID_HEIGHT = 5;
     public static final int GRID_WIDTH = 7;
     public static final int FLAT_LENGTH = GRID_HEIGHT * GRID_WIDTH;
     public static final int MIN_SCORE = -FLAT_LENGTH / 2 + 3;
