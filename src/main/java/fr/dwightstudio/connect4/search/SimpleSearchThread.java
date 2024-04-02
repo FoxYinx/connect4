@@ -14,8 +14,10 @@ public class SimpleSearchThread extends SolverSearchThread {
     protected int negamax(GameState state, int alpha, int beta, int depth) {
 
         if (depth > MAX_RECURSIVITY) {
-            if (state.isWinningState() || state.computeWinningPositions() != 0) {
-                return ((GameState.FLAT_LENGTH + 1 - state.getNbMoves()) / 2) - 1;
+            if (state.isWinningState()) {
+                return ((GameState.FLAT_LENGTH + 1 - state.getNbMoves()) / 2);
+            } else if (state.computeWinningPositions() != 0) {
+                return ((GameState.FLAT_LENGTH + 1 - state.getNbMoves()) / 2) - 2;
             } else {
                 return 0;
             }

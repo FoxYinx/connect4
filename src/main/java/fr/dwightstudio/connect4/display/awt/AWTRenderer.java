@@ -21,7 +21,7 @@ public class AWTRenderer extends DisplayController {
     static final Color SELECTED_BACKGROUND_COLOR = new Color(79, 147, 255);
     static final Color CIRCLE_COLOR = new Color(255, 224, 51);
     static final Color CROSS_COLOR = new Color(255, 79, 48);
-    static final Color WINNING_COLOR = new Color(0, 0, 0);
+    static final Color WINNING_COLOR = new Color(80, 255, 37);
 
     private final JFrame frame;
     private final BoardComponent boardComponent;
@@ -101,7 +101,7 @@ public class AWTRenderer extends DisplayController {
         int moves;
         int confidence = result.confidence();
 
-        if (state.getNbMoves() >= GameController.MASTERMIND_THRESHOLD) {
+        if (state.getNbMoves() > GameController.MASTERMIND_THRESHOLD) {
             if (result.confidence() > 0) {
                 moves = ((GameState.FLAT_LENGTH / 2) - confidence - state.getNbMoves() / 2) + 1;
                 confidenceString.append("(Wins at worse in ").append(moves).append(" move").append(moves > 1 ? "s" : "").append(")");

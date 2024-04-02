@@ -10,7 +10,7 @@ import static fr.dwightstudio.connect4.search.SolverSearchThread.COLUMN_ORDER;
 
 abstract public class GameController {
 
-    public static final int MASTERMIND_THRESHOLD = 8;
+    public static final int MASTERMIND_THRESHOLD = 6;
 
     protected final DisplayController displayController;
     protected GameState state;

@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 
 import static fr.dwightstudio.connect4.display.awt.AWTRenderer.*;
@@ -122,8 +123,7 @@ public class BoardComponent extends JPanel {
 
                         if (i == ' ') continue;
 
-                        System.out.println(" ");
-                        g2d.fillRoundRect(cellSize * x + cellSize / 3, cellSize * (GameState.GRID_HEIGHT - y - 1) + cellSize / 3, cellSize / 3, cellSize / 3, innerCellPadding, innerCellPadding );
+                        g2d.fillOval(cellSize * x + innerCellPadding, cellSize * (GameState.GRID_HEIGHT - y - 1) + innerCellPadding, innerCellSize, innerCellSize);
                     }
                 }
             }
@@ -146,9 +146,14 @@ public class BoardComponent extends JPanel {
         g2d.translate(- getWidth(), 0);
 
         // Draw information
+        Font font = new Font("Arial", Font.PLAIN, cellSize/4);
+        g2d.setFont(font);
         g2d.setColor(Color.WHITE);
-        g2d.setFont(new Font("Arial", Font.PLAIN, cellSize/3));
-        g2d.drawString(confidenceString, cellSize/2, cellSize * GameState.GRID_HEIGHT + cellSize/2);
+
+        FontMetrics metrics = g2d.getFontMetrics(font);
+        Rectangle2D bounds = metrics.getStringBounds(confidenceString, g2d);
+
+        g2d.drawString(confidenceString, (int) ((getWidth() - bounds.getWidth()) / 2), (int) (cellSize * GameState.GRID_HEIGHT + (cellSize - bounds.getHeight()) / 2) + innerCellPadding);
     }
 
     public void setState(GameState gameState) {
@@ -173,6 +178,7 @@ public class BoardComponent extends JPanel {
 
     public void setWon(boolean won) {
         this.won = won;
+        this.confidenceString = (this.currentState.isItCrossTurn() ? "Yellow" : "Red") + " wins!";
     }
 
     public void setConfidenceString(String confidenceString) {
