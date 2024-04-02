@@ -3,7 +3,7 @@ package fr.dwightstudio.connect4.game;
 public class TranspositionTable {
 
     public static final int SIZE = 8388593;
-    private static final Node[] TABLE = new Node[SIZE];
+    private final Node[] TABLE = new Node[SIZE];
 
     private int getIndex(GameState state) {
         int i = (int) (state.longHashCode() % ((long) SIZE));

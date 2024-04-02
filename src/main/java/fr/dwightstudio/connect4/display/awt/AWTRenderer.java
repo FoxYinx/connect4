@@ -99,14 +99,18 @@ public class AWTRenderer extends DisplayController {
         confidenceString.append("Confidence: ").append(result.confidence()).append(" ");
 
         int moves;
-        if (result.confidence() > 0) {
-            moves = ((GameState.FLAT_LENGTH / 2) - result.confidence() - state.getNbMoves() / 2) + 1;
-            confidenceString.append("(Wins at worse in ").append(moves).append(" move").append(moves > 1 ? "s" : "").append(")");
-        } else if (result.confidence() < 0) {
-            moves = (result.confidence() - state.getNbMoves() / 2 + (GameState.FLAT_LENGTH / 2)) + 1;
-            confidenceString.append("(Loses at worse in ").append(moves).append(" move").append(moves > 1 ? "s" : "").append(")");
-        } else {
-            confidenceString.append("(Draw at worse)");
+        int confidence = result.confidence();
+
+        if (Math.abs(confidence) <= GameState.FLAT_LENGTH / 2) {
+            if (result.confidence() > 0) {
+                moves = ((GameState.FLAT_LENGTH / 2) - confidence - state.getNbMoves() / 2) + 1;
+                confidenceString.append("(Wins at worse in ").append(moves).append(" move").append(moves > 1 ? "s" : "").append(")");
+            } else if (confidence < 0) {
+                moves = (confidence - state.getNbMoves() / 2 + (GameState.FLAT_LENGTH / 2)) + 1;
+                confidenceString.append("(Loses at worse in ").append(moves).append(" move").append(moves > 1 ? "s" : "").append(")");
+            } else {
+                confidenceString.append("(Draw at worse)");
+            }
         }
 
         boardComponent.setConfidenceString(confidenceString.toString());

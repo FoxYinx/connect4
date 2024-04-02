@@ -2,6 +2,8 @@ package fr.dwightstudio.connect4.game;
 
 import fr.dwightstudio.connect4.display.DisplayController;
 
+import static fr.dwightstudio.connect4.game.ThoroughSearchThread.COLUMN_ORDER;
+
 abstract public class GameController {
 
     protected final DisplayController displayController;
@@ -15,7 +17,6 @@ abstract public class GameController {
     abstract public void play();
 
     public SearchResult search(GameState state) {
-        SearchThread[] searchThreads = new SearchThread[GameState.GRID_WIDTH];
 
         // On vérifie que l'IA ne peut pas gagner immédiatement
         for (int i = 0; i < GameState.GRID_WIDTH; i++) {
@@ -26,14 +27,42 @@ abstract public class GameController {
             }
         }
 
+        if (state.getNbMoves() < 6) {
+            return simpleSearch(state);
+        } else {
+            return thoroughSearch(state);
+        }
+    }
+
+    private SearchResult simpleSearch(GameState state) {
+        SimpleSearchThread[] searchThreads = new SimpleSearchThread[GameState.GRID_WIDTH];
+
         for (int i = 0; i < GameState.GRID_WIDTH; i++) {
             if (state.isPlayable(i)) {
                 GameState state2 = state.play(i);
-                searchThreads[i] = new SearchThread(state2);
+                searchThreads[i] = new SimpleSearchThread(state2);
                 searchThreads[i].start();
             }
         }
 
+        return doSearch(searchThreads);
+    }
+
+    private SearchResult thoroughSearch(GameState state) {
+        ThoroughSearchThread[] searchThreads = new ThoroughSearchThread[GameState.GRID_WIDTH];
+
+        for (int i = 0; i < GameState.GRID_WIDTH; i++) {
+            if (state.isPlayable(i)) {
+                GameState state2 = state.play(i);
+                searchThreads[i] = new ThoroughSearchThread(state2);
+                searchThreads[i].start();
+            }
+        }
+
+        return doSearch(searchThreads);
+    }
+
+    private SearchResult doSearch(SearchThread[] searchThreads) {
         final int WAITING_MILLIS = 100;
 
         boolean done = false;
@@ -91,8 +120,8 @@ abstract public class GameController {
 
         if (best == -1) {
             for (int i = 0; i < GameState.GRID_WIDTH; i++) {
-                if (state.isPlayable(SearchThread.COLUMN_ORDER[i])) {
-                    best = SearchThread.COLUMN_ORDER[i];
+                if (state.isPlayable(COLUMN_ORDER[i])) {
+                    best = COLUMN_ORDER[i];
                     break;
                 }
             }
