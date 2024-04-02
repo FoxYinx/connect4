@@ -4,9 +4,9 @@ import fr.dwightstudio.connect4.display.DisplayController;
 import fr.dwightstudio.connect4.search.SearchResult;
 import fr.dwightstudio.connect4.search.SearchThread;
 import fr.dwightstudio.connect4.search.SimpleSearchThread;
-import fr.dwightstudio.connect4.search.ThoroughSearchThread;
+import fr.dwightstudio.connect4.search.SolverSearchThread;
 
-import static fr.dwightstudio.connect4.search.ThoroughSearchThread.COLUMN_ORDER;
+import static fr.dwightstudio.connect4.search.SolverSearchThread.COLUMN_ORDER;
 
 abstract public class GameController {
 
@@ -35,6 +35,7 @@ abstract public class GameController {
         if (state.getNbMoves() < MASTERMIND_THRESHOLD) {
             return simpleSearch(state);
         } else {
+            if (state.getNbMoves() == MASTERMIND_THRESHOLD) SolverSearchThread.TRANSPOSITION_TABLE.clear();
             return thoroughSearch(state);
         }
     }
@@ -56,12 +57,12 @@ abstract public class GameController {
     }
 
     private SearchResult thoroughSearch(GameState state) {
-        ThoroughSearchThread[] searchThreads = new ThoroughSearchThread[GameState.GRID_WIDTH];
+        SolverSearchThread[] searchThreads = new SolverSearchThread[GameState.GRID_WIDTH];
 
         for (int i = 0; i < GameState.GRID_WIDTH; i++) {
             if (state.isPlayable(i)) {
                 GameState state2 = state.play(i);
-                searchThreads[i] = new ThoroughSearchThread(state2);
+                searchThreads[i] = new SolverSearchThread(state2);
                 searchThreads[i].start();
             }
         }

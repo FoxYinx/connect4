@@ -123,7 +123,7 @@ public class BoardComponent extends JPanel {
                         if (i == ' ') continue;
 
                         System.out.println(" ");
-                        g2d.fillRoundRect(cellSize * x + cellSize / 4, cellSize * (GameState.GRID_HEIGHT - y - 1) + cellSize / 4, cellSize / 2, cellSize / 2, innerCellPadding * 2, innerCellPadding * 2);
+                        g2d.fillRoundRect(cellSize * x + cellSize / 3, cellSize * (GameState.GRID_HEIGHT - y - 1) + cellSize / 3, cellSize / 3, cellSize / 3, innerCellPadding, innerCellPadding );
                     }
                 }
             }

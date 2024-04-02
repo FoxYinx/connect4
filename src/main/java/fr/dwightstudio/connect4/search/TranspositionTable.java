@@ -2,6 +2,9 @@ package fr.dwightstudio.connect4.search;
 
 import fr.dwightstudio.connect4.game.GameState;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class TranspositionTable {
 
     public static final int SIZE = 8388593;
@@ -25,6 +28,10 @@ public class TranspositionTable {
         int index = getIndex(state);
 
         TABLE[index] = new Node(state, score);
+    }
+
+    public void clear() {
+        Arrays.fill(TABLE, null);
     }
 
     private record Node(GameState state, int score) {}

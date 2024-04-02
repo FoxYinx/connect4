@@ -6,7 +6,7 @@ import fr.dwightstudio.connect4.game.MoveSorter;
 
 import java.util.Arrays;
 
-public class ThoroughSearchThread extends SearchThread {
+public class SolverSearchThread extends SearchThread {
 
     public static final int[] COLUMN_ORDER;
 
@@ -39,9 +39,9 @@ public class ThoroughSearchThread extends SearchThread {
         }
     }
 
-    private static final TranspositionTable TRANSPOSITION_TABLE = new TranspositionTable();
+    public static final TranspositionTable TRANSPOSITION_TABLE = new TranspositionTable();
 
-    public ThoroughSearchThread(GameState initialState) {
+    public SolverSearchThread(GameState initialState) {
         super(initialState);
     }
 

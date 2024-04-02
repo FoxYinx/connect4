@@ -2,10 +2,9 @@ package fr.dwightstudio.connect4.search;
 
 import fr.dwightstudio.connect4.game.GameState;
 
-public class SimpleSearchThread extends ThoroughSearchThread {
+public class SimpleSearchThread extends SolverSearchThread {
 
     private static final int MAX_RECURSIVITY = 22;
-    private static final TranspositionTable TRANSPOSITION_TABLE = new TranspositionTable();
 
     public SimpleSearchThread(GameState initialState) {
         super(initialState);
