@@ -21,7 +21,7 @@ public class AWTRenderer extends DisplayController {
     static final Color SELECTED_BACKGROUND_COLOR = new Color(79, 147, 255);
     static final Color CIRCLE_COLOR = new Color(255, 224, 51);
     static final Color CROSS_COLOR = new Color(255, 79, 48);
-    static final Color WINNING_COLOR = new Color(35, 169, 0);
+    static final Color WINNING_COLOR = new Color(48, 255, 79);
 
     private final JFrame frame;
     private final BoardComponent boardComponent;
