@@ -2,7 +2,7 @@ package fr.dwightstudio.connect4.display.console;
 
 import fr.dwightstudio.connect4.display.DisplayController;
 import fr.dwightstudio.connect4.game.GameState;
-import fr.dwightstudio.connect4.game.SearchResult;
+import fr.dwightstudio.connect4.search.SearchResult;
 
 import java.util.Scanner;
 

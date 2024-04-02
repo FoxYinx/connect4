@@ -62,7 +62,7 @@ public class Main {
         } else if (choice.equals("5")) {
                 gameController = new TestController(displayController);
         } else if (choice.equalsIgnoreCase("learn")) {
-            crippy();
+            creepy();
             return;
         } else {
             throw new RuntimeException("Make a valid choice dummy (1 or 2 or 3)");
@@ -73,25 +73,15 @@ public class Main {
         gameController.play();
     }
 
-    private static void crippy() {
+    private static void creepy() {
         System.out.println("What did you do?");
         System.out.println("How did you get here?");
-        System.out.println("sudo -u");
+        System.out.println("> sudo -u");
         System.out.println("No, what r u doing?");
-        System.out.println("rm -r ./*");
+        System.out.println("> rm -r ./*");
         System.out.println("NO, DO NOT DO THAT, DON'T PUSH THAT BUTTON");
         System.out.println("Deleting in progress...");
         System.out.println("譁 \t� \t蟄 \t怜 \t喧 \t縺 \t�");
         throw new RuntimeException();
-    }
-
-    private static void create(DisplayController controller) {
-        GameState state = new GameState();
-
-        while (true) {
-            int x = controller.play(state);
-            state = state.play(x);
-            System.out.println(state);
-        }
     }
 }

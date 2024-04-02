@@ -1,8 +1,9 @@
 package fr.dwightstudio.connect4.display.awt;
 
 import fr.dwightstudio.connect4.display.DisplayController;
+import fr.dwightstudio.connect4.game.GameController;
 import fr.dwightstudio.connect4.game.GameState;
-import fr.dwightstudio.connect4.game.SearchResult;
+import fr.dwightstudio.connect4.search.SearchResult;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,10 +19,9 @@ public class AWTRenderer extends DisplayController {
 
     static final Color BACKGROUND_COLOR = new Color(23, 112, 255);
     static final Color SELECTED_BACKGROUND_COLOR = new Color(79, 147, 255);
-    static final Color CROSS_COLOR = new Color(255, 224, 51);
-    static final Color CROSS_COLOR_WINNING = new Color(95, 255, 51);
-    static final Color CIRCLE_COLOR = new Color(255, 79, 48);
-    static final Color CIRCLE_COLOR_WINNING = new Color(65, 255, 211);
+    static final Color CIRCLE_COLOR = new Color(255, 224, 51);
+    static final Color CROSS_COLOR = new Color(255, 79, 48);
+    static final Color WINNING_COLOR = new Color(102, 255, 57);
 
     private final JFrame frame;
     private final BoardComponent boardComponent;
@@ -101,7 +101,7 @@ public class AWTRenderer extends DisplayController {
         int moves;
         int confidence = result.confidence();
 
-        if (Math.abs(confidence) <= GameState.FLAT_LENGTH / 2) {
+        if (state.getNbMoves() >= GameController.MASTERMIND_THRESHOLD) {
             if (result.confidence() > 0) {
                 moves = ((GameState.FLAT_LENGTH / 2) - confidence - state.getNbMoves() / 2) + 1;
                 confidenceString.append("(Wins at worse in ").append(moves).append(" move").append(moves > 1 ? "s" : "").append(")");
@@ -111,6 +111,8 @@ public class AWTRenderer extends DisplayController {
             } else {
                 confidenceString.append("(Draw at worse)");
             }
+        } else {
+            confidenceString.append("(Setting up the strategy...)");
         }
 
         boardComponent.setConfidenceString(confidenceString.toString());

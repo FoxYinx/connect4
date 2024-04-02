@@ -1,4 +1,8 @@
-package fr.dwightstudio.connect4.game;
+package fr.dwightstudio.connect4.search;
+
+import fr.dwightstudio.connect4.game.GameState;
+import fr.dwightstudio.connect4.game.MoveScore;
+import fr.dwightstudio.connect4.game.MoveSorter;
 
 import java.util.Arrays;
 
@@ -70,7 +74,7 @@ public class ThoroughSearchThread extends SearchThread {
      *  - negative score if your opponent can force you to lose. Your score is the opposite of
      *    the number of moves before the end you will lose (the faster you lose, the lower your score).
      */
-    private int negamax(GameState state, int alpha, int beta, int depth) {
+    protected int negamax(GameState state, int alpha, int beta, int depth) {
         nb++;
 
         // check for draw game

@@ -1,6 +1,7 @@
 package fr.dwightstudio.connect4.game;
 
 import fr.dwightstudio.connect4.display.DisplayController;
+import fr.dwightstudio.connect4.search.SearchResult;
 
 public class CaptchaController extends GameController {
     public CaptchaController(DisplayController displayController) {

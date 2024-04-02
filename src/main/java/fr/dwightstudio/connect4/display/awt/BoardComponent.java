@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
+import java.util.Arrays;
 
 import static fr.dwightstudio.connect4.display.awt.AWTRenderer.*;
 
@@ -112,18 +113,17 @@ public class BoardComponent extends JPanel {
         if (won) {
             final GameState winningState = currentState.getWinningState();
 
-            g2d.setColor(currentState.isItCrossTurn() ? CIRCLE_COLOR_WINNING : CROSS_COLOR_WINNING);
             if (winningState != null) {
+                g2d.setColor(WINNING_COLOR);
+
                 for (int x = 0; x < GameState.GRID_WIDTH; x++) {
                     for (int y = 0; y < GameState.GRID_WIDTH; y++) {
                         int i = winningState.get(x, y);
 
                         if (i == ' ') continue;
 
-                        g2d.fillOval(cellSize * x + innerCellPadding,
-                                cellSize * (GameState.GRID_HEIGHT - y - 1) + innerCellPadding,
-                                innerCellSize,
-                                innerCellSize);
+                        System.out.println(" ");
+                        g2d.fillRoundRect(cellSize * x + cellSize / 4, cellSize * (GameState.GRID_HEIGHT - y - 1) + cellSize / 4, cellSize / 2, cellSize / 2, innerCellPadding * 2, innerCellPadding * 2);
                     }
                 }
             }

@@ -1,4 +1,6 @@
-package fr.dwightstudio.connect4.game;
+package fr.dwightstudio.connect4.search;
+
+import fr.dwightstudio.connect4.game.GameState;
 
 public abstract class SearchThread extends Thread {
 
@@ -11,7 +13,7 @@ public abstract class SearchThread extends Thread {
         this.nb = 0;
     }
 
-    long getNb() {
+    public long getNb() {
         return nb;
     }
 

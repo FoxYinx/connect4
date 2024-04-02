@@ -1,7 +1,7 @@
 package fr.dwightstudio.connect4.display;
 
 import fr.dwightstudio.connect4.game.GameState;
-import fr.dwightstudio.connect4.game.SearchResult;
+import fr.dwightstudio.connect4.search.SearchResult;
 
 public abstract class DisplayController {
 

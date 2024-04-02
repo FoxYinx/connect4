@@ -1,6 +1,7 @@
 package fr.dwightstudio.connect4.game;
 
 import fr.dwightstudio.connect4.display.DisplayController;
+import fr.dwightstudio.connect4.search.SearchResult;
 
 public class FightController extends GameController {
     public FightController(DisplayController displayController) {

@@ -1,10 +1,16 @@
 package fr.dwightstudio.connect4.game;
 
 import fr.dwightstudio.connect4.display.DisplayController;
+import fr.dwightstudio.connect4.search.SearchResult;
+import fr.dwightstudio.connect4.search.SearchThread;
+import fr.dwightstudio.connect4.search.SimpleSearchThread;
+import fr.dwightstudio.connect4.search.ThoroughSearchThread;
 
-import static fr.dwightstudio.connect4.game.ThoroughSearchThread.COLUMN_ORDER;
+import static fr.dwightstudio.connect4.search.ThoroughSearchThread.COLUMN_ORDER;
 
 abstract public class GameController {
+
+    public static final int MASTERMIND_THRESHOLD = 8;
 
     protected final DisplayController displayController;
     protected GameState state;
@@ -17,7 +23,6 @@ abstract public class GameController {
     abstract public void play();
 
     public SearchResult search(GameState state) {
-
         // On vérifie que l'IA ne peut pas gagner immédiatement
         for (int i = 0; i < GameState.GRID_WIDTH; i++) {
             if (state.isPlayable(i)) {
@@ -27,7 +32,7 @@ abstract public class GameController {
             }
         }
 
-        if (state.getNbMoves() < 6) {
+        if (state.getNbMoves() < MASTERMIND_THRESHOLD) {
             return simpleSearch(state);
         } else {
             return thoroughSearch(state);
@@ -35,6 +40,8 @@ abstract public class GameController {
     }
 
     private SearchResult simpleSearch(GameState state) {
+        if (state.getNbMoves() == 0) return new SearchResult(GameState.GRID_WIDTH / 2, (GameState.FLAT_LENGTH + 1) / 2);
+
         SimpleSearchThread[] searchThreads = new SimpleSearchThread[GameState.GRID_WIDTH];
 
         for (int i = 0; i < GameState.GRID_WIDTH; i++) {
@@ -82,7 +89,7 @@ abstract public class GameController {
                 long nb = searchThread.getNb() / 1000;
                 total += nb;
                 if (!searchThread.isAlive()) {
-                    System.out.printf(" [%9s]", "Done");
+                    System.out.printf(" [ %9s]", "Done");
                 } else {
                     done = false;
                     System.out.printf(" [%,9dk]", nb);

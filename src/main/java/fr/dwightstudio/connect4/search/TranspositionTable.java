@@ -1,4 +1,6 @@
-package fr.dwightstudio.connect4.game;
+package fr.dwightstudio.connect4.search;
+
+import fr.dwightstudio.connect4.game.GameState;
 
 public class TranspositionTable {
 
