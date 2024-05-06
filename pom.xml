@@ -23,4 +23,75 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <build>
+        <finalName>connect4</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <inherited>false</inherited>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>fr.dwightstudio.connect4.Main</mainClass>
+                    <skip>false</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <developers>
+        <developer>
+            <id>aleconte</id>
+            <name>Alexandre Leconte</name>
+            <email>aleconte@dwightstudio.fr</email>
+            <url>https://dwightstudio.fr/deleranax</url>
+            <organization>Dwight Studio</organization>
+            <organizationUrl>https://www.dwightstudio.fr</organizationUrl>
+            <timezone>Europe/Paris</timezone>
+            <properties>
+                <picUrl>https://static.dwightstudio.fr/dwightstudio/PERSONAL/Deleranax/LOGO.png</picUrl>
+            </properties>
+        </developer>
+
+        <developer>
+            <id>ktollemer</id>
+            <name>Kévin Tollemer</name>
+            <email>ktollemer@dwightstudio.fr</email>
+            <url>https://dwightstudio.fr/yinx</url>
+            <organization>Dwight Studio</organization>
+            <organizationUrl>https://www.dwightstudio.fr</organizationUrl>
+            <timezone>Europe/Paris</timezone>
+            <properties>
+                <picUrl>https://static.dwightstudio.fr/dwightstudio/PERSONAL/Yinx/LOGO.png</picUrl>
+            </properties>
+        </developer>
+    </developers>
+
 </project>

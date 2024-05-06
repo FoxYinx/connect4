@@ -53,8 +53,10 @@ public class SolverSearchThread extends SearchThread {
         // iteratively narrow the min-max exploration window
         while (min < max) {
             int med = min + (max - min) / 2;
+
             if (med <= 0 && min / 2 < med) med = min / 2;
             else if (med >= 0 && max / 2 > med) med = max / 2;
+
             int r = negamax(initialState, med, med + 1, 0);   // use a null depth window to know if the actual score is greater or smaller than med
             if (r <= med) max = r;
             else min = r;
